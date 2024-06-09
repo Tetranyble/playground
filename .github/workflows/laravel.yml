@@ -1,8 +1,0 @@
-name: Laravel
-
-on:
-  push:
-    paths:
-      - '/**'
-      - '.github/workflows/**.yml'
- 

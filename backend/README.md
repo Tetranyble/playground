@@ -53,4 +53,4 @@ If you discover a security vulnerability within Ugbanawaji, please send an e-mai
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+The Laravel framework is open-sourced software licensed under the [MIT license](orhttps://opensource.org/licenses/MIT).
