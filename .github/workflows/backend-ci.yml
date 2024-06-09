@@ -30,7 +30,7 @@ jobs:
         run: chmod -R 777 storage backend/bootstrap/cache
 
       - name: Install npm packages
-        run: npm install --error --working-dir=backend
+        run: cd backend && npm install --error && npm run build
 
       - name: Create Database
         run: |
@@ -38,13 +38,13 @@ jobs:
           touch backend/database/database.sqlite
 
       - name: Run Code Format
-        run: backend/vendor/bin/pint --preset=laravel --verbose
+        run:  cd backend && vendor/bin/phpunit --preset=laravel --verbose
 
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         env:
           DB_CONNECTION: sqlite
-          DB_DATABASE: backend/database/database.sqlite
-        run: backend/vendor/bin/phpunit
+          DB_DATABASE: database/database.sqlite
+        run: cd backend && php artisan test
 
       - name: Check for formatting changes
         run: git diff --exit-code || echo "Formatting changes detected."
