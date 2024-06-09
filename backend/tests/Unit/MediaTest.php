@@ -96,5 +96,4 @@ class MediaTest extends TestCase
         $this->assertEquals($disk, $media->disk);
         $this->assertInstanceOf(StorageProvider::class, $media->disk);
     }
-
 }

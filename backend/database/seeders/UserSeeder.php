@@ -27,12 +27,12 @@ class UserSeeder extends Seeder
             ->create([
                 'user_id' => $user->id,
             ]);
-//        $user = User::factory()->create([
-//            'firstname' => 'Movies',
-//            'lastname' => 'Web',
-//            'email' => 'movieswebbs@gmail.com',
-//            'password' => 'password',
-//        ]);
+        //        $user = User::factory()->create([
+        //            'firstname' => 'Movies',
+        //            'lastname' => 'Web',
+        //            'email' => 'movieswebbs@gmail.com',
+        //            'password' => 'password',
+        //        ]);
 
         $user->assignRoles('developer');
         UserProfile::factory()

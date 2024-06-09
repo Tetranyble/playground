@@ -107,21 +107,21 @@ Route::middleware('auth')->prefix('services')->group(function () {
         ->name('services.authorization');
 
 });
-Route::get('facebook', function (){
+Route::get('facebook', function () {
     Api::init(
         config('services.facebook.client_id'),
         config('services.facebook.client_secret'),
         config('services.facebook.token')
-        );
+    );
 
-// The Api object is now available through singleton
+    // The Api object is now available through singleton
     $api = Api::instance();
 
-    $account = new AdAccount(null,null,$api);
+    $account = new AdAccount(null, null, $api);
     //$account->name = 'My account name';
     echo $account->name;
 });
-Route::get('facebook2', function (){
+Route::get('facebook2', function () {
     $fb = new \Facebook\Facebook([
         'app_id' => config('services.facebook.client_id'),
         'app_secret' => config('services.facebook.client_secret'),
@@ -130,11 +130,12 @@ Route::get('facebook2', function (){
     ]);
 
     //return $fb->request('GET', '/me')->getResponse();
-   $response = $fb->get('/search?q=coffee&type=group&center=37.76,122.427&distance=1000', '504981644943693|gCqVbZsTz2xV9NhPGKD1ln2IIiM');
+    $response = $fb->get('/search?q=coffee&type=group&center=37.76,122.427&distance=1000', '504981644943693|gCqVbZsTz2xV9NhPGKD1ln2IIiM');
+
     return $response;
 
 });
-Route::get('firefox',function (){
+Route::get('firefox', function () {
     $serverUrl = 'http://localhost:4444';
     $desiredCapabilities = DesiredCapabilities::firefox();
 
@@ -149,17 +150,14 @@ Route::get('firefox',function (){
     // Disable accepting SSL certificates
     $desiredCapabilities->setCapability('acceptSslCerts', false);
 
-
     //$firefoxOptions->addArguments(['-headless']);
 
-// Firefox
+    // Firefox
 
     $driver = RemoteWebDriver::create($serverUrl, $desiredCapabilities);
 
     // Go to URL
     $driver->get('https://www.facebook.com/login.php?login_attempt=1');
-
-
 
     $emailField = $driver->findElement(WebDriverBy::id('email')); // find search input element
 
@@ -184,18 +182,18 @@ Route::get('firefox',function (){
         //$this->fail('FB login button not found');
     }
 
-//    $driver->wait(40,1000)->until(
-//        WebDriverExpectedCondition::urlContains('/checkpoint/?next')
-//        );
-//    $checkBrowser = $driver->findElement(WebDriverBy::name('name_action_selected'));
-//    $driver->wait(45,1000)->until(
-//        WebDriverExpectedCondition::visibilityOf($checkBrowser)
-//    );
-//    $checkBrowser->click();
-//    $saveBrowser = $driver->findElement(WebDriverBy::name('submit[Continue]'));
-//    $saveBrowser->click();
+    //    $driver->wait(40,1000)->until(
+    //        WebDriverExpectedCondition::urlContains('/checkpoint/?next')
+    //        );
+    //    $checkBrowser = $driver->findElement(WebDriverBy::name('name_action_selected'));
+    //    $driver->wait(45,1000)->until(
+    //        WebDriverExpectedCondition::visibilityOf($checkBrowser)
+    //    );
+    //    $checkBrowser->click();
+    //    $saveBrowser = $driver->findElement(WebDriverBy::name('submit[Continue]'));
+    //    $saveBrowser->click();
     //https://web.facebook.com/search/groups/?q=program
-     $driver->get('https://web.facebook.com/search/groups/?q=program');
+    $driver->get('https://web.facebook.com/search/groups/?q=program');
 
     $groups = $driver->findElements(WebDriverBy::cssSelector("div[role='article']"));
 
@@ -205,7 +203,7 @@ Route::get('firefox',function (){
     );
     Storage::disk('local')->put('cookie.json', json_encode($cookies));
 
-    $groupData = collect($groups)->map(function (RemoteWebElement $group){
+    $groupData = collect($groups)->map(function (RemoteWebElement $group) {
 
         return [
             //'image' => $group->findElement(WebDriverBy::cssSelector("image[preserveAspectRatio*='slice']"))->getAttribute('xlink:href'),
@@ -215,14 +213,13 @@ Route::get('firefox',function (){
             'description' => $group->findElements(WebDriverBy::cssSelector("span[class*='x1n2onr6']"))[1]->getText(),
             //'description' => $group->findElements(WebDriverBy::cssSelector("span[style*='-webkit-line-clamp: 2; display: -webkit-box;']"))[1]->getText(),
         ];
-    })->filter(fn($group) => preg_match('/[0-9]+K/i', $group['subscribers']));
+    })->filter(fn ($group) => preg_match('/[0-9]+K/i', $group['subscribers']));
 
     $driver->quit();
+
     return $groupData->values();
 
 });
-
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');

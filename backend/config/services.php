@@ -56,8 +56,8 @@ return [
         'redirect' => env('APP_URL').'/api/v1/login/linkedin',
     ],
     'google' => [
-        'place_key' => env('GOOGLE_PLACE_KEY',''),
-        'place_url' => env('GOOGLE_PLACE_URL',''),
+        'place_key' => env('GOOGLE_PLACE_KEY', ''),
+        'place_url' => env('GOOGLE_PLACE_URL', ''),
         'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
         'redirect' => env('APP_URL').'/api/v1/login/google',

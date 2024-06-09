@@ -17,9 +17,8 @@ class Message extends Model
     ];
 
     protected $casts = [
-        'is_read' => 'boolean'
+        'is_read' => 'boolean',
     ];
-
 
     public function user()
     {

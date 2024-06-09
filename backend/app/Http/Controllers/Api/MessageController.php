@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\GeneralRequest;
 use App\Http\Resources\MessageCollection;
 use App\Http\Resources\MessageResource;
-use App\Http\Resources\UserCollection;
 use App\Models\Message;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -21,24 +20,29 @@ class MessageController extends Controller
      *     summary="The resource collection",
      *     description="The resource collection",
      *     operationId="Api/MessageController::index",
+     *
      *     @OA\Parameter(
      *          name="user",
      *          in="path",
      *          description="The user id",
      *          required=true,
+     *
      *          @OA\Schema(
      *              type="string",
      *          )
      *      ),
+     *
      *     @OA\Parameter(
      *         name="search",
      *         in="query",
      *         description="Search the resource by name or description",
      *         required=false,
+     *
      *         @OA\Schema(
      *             type="string",
      *         )
      *     ),
+     *
      *     @OA\Parameter(
      *         name="quantity",
      *         in="query",
@@ -74,7 +78,7 @@ class MessageController extends Controller
     public function index(GeneralRequest $request, $user)
     {
         $messages = Message::query()
-            ->where('user_id', function ($q)use($user){
+            ->where('user_id', function ($q) use ($user) {
                 $q->from('users')
                     ->select('id')
                     ->where('email', $user)
@@ -109,15 +113,18 @@ class MessageController extends Controller
      *         in="path",
      *         description="The user Id or email",
      *         required=true,
+     *
      *         @OA\Schema(
      *             type="string",
      *         )
      *     ),
+     *
      *     @OA\Parameter(
      *          name="messageId",
      *          in="path",
      *          description="The message Id",
      *          required=true,
+     *
      *          @OA\Schema(
      *              type="integer",
      *          )
@@ -151,7 +158,7 @@ class MessageController extends Controller
     {
         $messages = Message::query()
             ->where('id', $message)
-            ->where('user_id', function ($q)use($user){
+            ->where('user_id', function ($q) use ($user) {
                 $q->from('users')
                     ->select('id')
                     ->where('email', $user)
@@ -159,6 +166,7 @@ class MessageController extends Controller
                     ->limit(1);
             })->first();
         $messages->update(['is_read' => true]);
+
         return $this->success(
             new MessageResource($messages->refresh()),
             'success'
@@ -174,9 +182,11 @@ class MessageController extends Controller
      *     security={ * {"sanctum": {} } * },
      *     description="The employee resource.",
      *     tags={"Messages"},
+     *
      *     @OA\RequestBody(
      *          description="Update message",
      *          required=true,
+     *
      *          @OA\MediaType(
      *              mediaType="application/json",
      *              example={
@@ -185,20 +195,24 @@ class MessageController extends Controller
      *
      *          )
      *      ),
+     *
      *     @OA\Parameter(
      *         name="user",
      *         in="path",
      *         description="The user Id or email",
      *         required=true,
+     *
      *         @OA\Schema(
      *             type="string",
      *         )
      *     ),
+     *
      *     @OA\Parameter(
      *          name="messageId",
      *          in="path",
      *          description="The message Id",
      *          required=true,
+     *
      *          @OA\Schema(
      *              type="integer",
      *          )
@@ -232,7 +246,7 @@ class MessageController extends Controller
     {
         $messages = Message::query()
             ->where('id', $message)
-            ->where('user_id', function ($q)use($user){
+            ->where('user_id', function ($q) use ($user) {
                 $q->from('users')
                     ->select('id')
                     ->where('email', $user)
@@ -240,6 +254,7 @@ class MessageController extends Controller
                     ->limit(1);
             })->first();
         $messages->update(['is_read' => $request->is_read]);
+
         return $this->success(
             new MessageResource($messages->refresh()),
             'success'

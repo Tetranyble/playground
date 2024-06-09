@@ -13,7 +13,7 @@ class MessageTest extends TestCase
     /** @test */
     public function it_has_required_columns(): void
     {
-        $this->assertTrue(Schema::hasColumns('messages',[
+        $this->assertTrue(Schema::hasColumns('messages', [
             'subject',
             'content',
             'is_read',

@@ -20,7 +20,7 @@ class GooglePlaceController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $response = Http::get(config('services.google.place_url'),[
+        $response = Http::get(config('services.google.place_url'), [
             'location' => "{$request->latitude},{$request->longitude}",
             'key' => config('services.google.place_key'),
             'type' => $request->type,
@@ -28,27 +28,27 @@ class GooglePlaceController extends Controller
 
         ]);
 
-        if ($response->failed()){
+        if ($response->failed()) {
             return $this->error([], 'failed');
         }
         $places = collect($response->json('results'))
-            ->map(function ($place){
+            ->map(function ($place) {
 
-            return [
-                'latitude' => $place['geometry']['location']['lat'],
-                'longitude' => $place['geometry']['location']['lng'],
-                'icon' => $place['icon'],
-                'name' => $place['name'],
-                'place_id' => $place['place_id'],
-                'vicinity' => $place['vicinity']
-            ];
-        })->last();
+                return [
+                    'latitude' => $place['geometry']['location']['lat'],
+                    'longitude' => $place['geometry']['location']['lng'],
+                    'icon' => $place['icon'],
+                    'name' => $place['name'],
+                    'place_id' => $place['place_id'],
+                    'vicinity' => $place['vicinity'],
+                ];
+            })->last();
 
         $groups = $this->groups($places['vicinity']);
 
         return $this->success(
             $groups,
-        'success'
+            'success'
         );
     }
 
@@ -68,17 +68,14 @@ class GooglePlaceController extends Controller
         // Disable accepting SSL certificates
         $desiredCapabilities->setCapability('acceptSslCerts', false);
 
-
         //$firefoxOptions->addArguments(['-headless']);
 
-// Firefox
+        // Firefox
 
         $driver = RemoteWebDriver::create($serverUrl, $desiredCapabilities);
 
         // Go to URL
         $driver->get('https://www.facebook.com/login.php?login_attempt=1');
-
-
 
         $emailField = $driver->findElement(WebDriverBy::id('email')); // find search input element
 
@@ -103,16 +100,16 @@ class GooglePlaceController extends Controller
             //$this->fail('FB login button not found');
         }
 
-//    $driver->wait(40,1000)->until(
-//        WebDriverExpectedCondition::urlContains('/checkpoint/?next')
-//        );
-//    $checkBrowser = $driver->findElement(WebDriverBy::name('name_action_selected'));
-//    $driver->wait(45,1000)->until(
-//        WebDriverExpectedCondition::visibilityOf($checkBrowser)
-//    );
-//    $checkBrowser->click();
-//    $saveBrowser = $driver->findElement(WebDriverBy::name('submit[Continue]'));
-//    $saveBrowser->click();
+        //    $driver->wait(40,1000)->until(
+        //        WebDriverExpectedCondition::urlContains('/checkpoint/?next')
+        //        );
+        //    $checkBrowser = $driver->findElement(WebDriverBy::name('name_action_selected'));
+        //    $driver->wait(45,1000)->until(
+        //        WebDriverExpectedCondition::visibilityOf($checkBrowser)
+        //    );
+        //    $checkBrowser->click();
+        //    $saveBrowser = $driver->findElement(WebDriverBy::name('submit[Continue]'));
+        //    $saveBrowser->click();
         //https://web.facebook.com/search/groups/?q=program
         $driver->get("https://web.facebook.com/search/groups/?q={$place}");
 
@@ -124,7 +121,7 @@ class GooglePlaceController extends Controller
         );
         Storage::disk('local')->put('cookie.json', json_encode($cookies));
 
-        $groupData = collect($groups)->map(function (RemoteWebElement $group){
+        $groupData = collect($groups)->map(function (RemoteWebElement $group) {
 
             return [
                 //'image' => $group->findElement(WebDriverBy::cssSelector("image[preserveAspectRatio*='slice']"))->getAttribute('xlink:href'),
@@ -134,7 +131,7 @@ class GooglePlaceController extends Controller
                 'description' => $group->findElements(WebDriverBy::cssSelector("span[class*='x1n2onr6']"))[1]->getText(),
                 //'description' => $group->findElements(WebDriverBy::cssSelector("span[style*='-webkit-line-clamp: 2; display: -webkit-box;']"))[1]->getText(),
             ];
-        })->filter(function ($group){
+        })->filter(function ($group) {
             return preg_match('/[0-9]+K/i', $group['subscribers']) &&
                 preg_match(
                     '/Private/i',
@@ -143,6 +140,7 @@ class GooglePlaceController extends Controller
         });
 
         $driver->quit();
+
         return $groupData->values();
     }
 }
