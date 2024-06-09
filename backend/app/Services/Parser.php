@@ -1,12 +1,7 @@
 <?php
 
-namespace App\services;
+namespace App\Services;
 
-use App\Models\Degree;
-use App\Models\Employer;
-use App\Models\Position;
-use App\Models\Skill;
-use App\Models\University;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Image;

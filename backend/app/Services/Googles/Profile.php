@@ -1,6 +1,6 @@
 <?php
 
-namespace App\services\Googles;
+namespace App\Services\Googles;
 
 use Google\Client;
 use Google_Service_Oauth2;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\services\Googles;
+namespace App\Services\Googles;
 
 use Google_Service_Calendar_Event;
 

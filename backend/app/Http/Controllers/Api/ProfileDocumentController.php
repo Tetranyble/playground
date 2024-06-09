@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ResumeRequest;
 use App\Http\Resources\UserProfileResource;
-use App\services\FileSystem;
-use App\services\ResumeParser;
+use App\Services\FileSystem;
+use App\Services\ResumeParser;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

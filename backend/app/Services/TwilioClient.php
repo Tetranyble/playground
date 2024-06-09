@@ -1,6 +1,6 @@
 <?php
 
-namespace App\services;
+namespace App\Services;
 
 use App\Interface\PhoneVerificationInterface;
 use App\Models\User;

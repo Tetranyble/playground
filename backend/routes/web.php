@@ -71,14 +71,14 @@ Route::get('youtube', function () {
     return 'done';
 });
 
-Route::get('channel', function (\App\services\Google\Youtube $youtube) {
+Route::get('channel', function (\App\Services\Google\Youtube $youtube) {
 
     return auth('web')->user()->storeSearch([
         'q' => 'nollywood movies',
         'type' => 'video',
     ]);
 })->middleware('auth');
-Route::get('channels', function (\App\services\Google\Youtube $youtube) {
+Route::get('channels', function (\App\Services\Google\Youtube $youtube) {
 
     return $channels = auth('web')->user()->load('channels');
     $user = User::where('email', 'senenerst@gmail.com')->with('channels')->first();

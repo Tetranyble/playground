@@ -4,8 +4,8 @@ namespace App\Traits;
 
 use App\Models\Channel;
 use App\Models\ChannelVideo;
-use App\services\Google\Profile;
-use App\services\Google\Youtube;
+use App\Services\Google\Profile;
+use App\Services\Google\Youtube;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
