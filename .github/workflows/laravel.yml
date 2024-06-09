@@ -31,5 +31,5 @@ jobs:
     - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
       env:
         DB_CONNECTION: sqlite
-        DB_DATABASE: backend/database/database.sqlite
+        DB_DATABASE: database/database.sqlite
       run: cd backend && php artisan test
