@@ -1,6 +1,6 @@
 <?php
 
-namespace App\services;
+namespace App\Services;
 
 use App\Enums\StorageProvider;
 use App\Traits\FileSystemTrait;
