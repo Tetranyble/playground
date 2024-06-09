@@ -7,7 +7,8 @@
 <p align="center">
 
 </p>
-![Test CI](https://github.com/Tetranyble/playground/actions/workflows/laravel.yml/badge.svg)
+
+![BACKEND TEST CI](https://github.com/Tetranyble/playground/actions/workflows/backend.yml/badge.svg)
 
 ## Motivation behind this MONOREPO
 
