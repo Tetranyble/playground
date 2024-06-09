@@ -32,4 +32,4 @@ jobs:
       env:
         DB_CONNECTION: sqlite
         DB_DATABASE: backend/database/database.sqlite
-      run: php backend/artisan test
+      run: cd backend && php artisan test
