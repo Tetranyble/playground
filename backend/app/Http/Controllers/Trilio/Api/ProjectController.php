@@ -5,14 +5,11 @@ namespace App\Http\Controllers\Trilio\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GeneralRequest;
 use App\Http\Requests\ProjectRequest;
-use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Resources\ProjectCollection;
 use App\Http\Resources\ProjectResource;
-use App\Http\Resources\UserResource;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
@@ -160,6 +157,7 @@ class ProjectController extends Controller
      *         in="path",
      *         description="The project uuid",
      *         required=true,
+     *
      *         @OA\Schema(
      *             type="string",
      *         )
@@ -211,6 +209,7 @@ class ProjectController extends Controller
      *          in="path",
      *          description="The project resource uuid",
      *          required=true,
+     *
      *          @OA\Schema(
      *              type="string",
      *          )
