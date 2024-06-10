@@ -9,6 +9,9 @@
 </p>
 
 ![BACKEND TEST CI](https://github.com/Tetranyble/playground/actions/workflows/backend.yml/badge.svg)
+[![Backend Issues](https://img.shields.io/github/issues/Tetranyble/playground?style=flat-square)](https://github.com/Tetranyble/playground/issues)
+[![Stars](https://img.shields.io/github/stars/Tetranyble/playground?style=flat-square)](https://github.com/Tetranyble/playground/issues)
+[![GitHub license](https://img.shields.io/github/license/Tetranyble/playground?style=flat-square)](https://github.com/Tetranyle/playground/blob/main/LICENSE.md)
 
 ## Motivation behind this MONOREPO
 
