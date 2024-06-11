@@ -27,7 +27,7 @@ use YoutubeDl\YoutubeDl;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return "welcome to playground application";
 });
 
 Route::get('youtube', function () {

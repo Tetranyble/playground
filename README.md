@@ -1,11 +1,13 @@
 <p align="center">
-    <a href="https://ugbanawaji.com/api/v1/documentation" target="_blank">
-        <img src="./media/og-monorepotools.jpeg" alt="Mono repo" width="100%">
+    <a href="https://github.com/Tetranyble/playground/blob/trilio/backend/app/Models/Activity.php" target="_blank">
+        <img src="./media/code.png" alt="Mono repo" width="100%">
     </a>
 </p>
 
 <p align="center">
-
+    <a href="https://github.com/Tetranyble/playground/blob/trilio/backend/tests/Feature/Trilio/ActivityTest.php" target="_blank">
+        <img src="./media/code1.png" alt="Mono repo" width="100%">
+    </a>
 </p>
 
 ![BACKEND TEST CI](https://github.com/Tetranyble/playground/actions/workflows/backend.yml/badge.svg)
@@ -127,12 +129,12 @@ Here are the common scripts you might need:
 We welcome contributions! Please follow these steps to contribute:
 
 1. Fork the repository.
-2. Create a new branch (\`git checkout -b feature/your-feature\`).
+2. Create a new branch (`git checkout -b feature/your-feature`).
 3. Make your changes.
-4. Commit your changes (\`git commit -m 'Add some feature'\`).
-5. Push to the branch (\`git push origin feature/your-feature\`).
+4. Commit your changes (`git commit -m 'Add some feature'`).
+5. Push to the branch (`git push origin feature/your-feature`).
 6. Open a Pull Request.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.

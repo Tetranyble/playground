@@ -178,7 +178,7 @@ class MessageController extends Controller
      *     path="/users/{user}/messages/{messageId}",
      *     summary="The employee resource",
      *     description="The employee resource",
-     *     operationId="Api/MessageController::show",
+     *     operationId="Api/MessageController::update",
      *     security={ * {"sanctum": {} } * },
      *     description="The employee resource.",
      *     tags={"Messages"},

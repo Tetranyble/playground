@@ -1174,6 +1174,78 @@
                         "sanctum": []
                     }
                 ]
+            },
+            "patch": {
+                "tags": [
+                    "Messages"
+                ],
+                "summary": "The employee resource",
+                "description": "The employee resource.",
+                "operationId": "Api/MessageController::update",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "The user Id or email",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "messageId",
+                        "in": "path",
+                        "description": "The message Id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Update message",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "example": {
+                                "is_read": true
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "success",
+                                    "status": true
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/422"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/500"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
             }
         },
         "/users/phone/verification": {
@@ -1837,10 +1909,677 @@
                     }
                 }
             }
+        },
+        "/trilio/projects/{projectUuid}/activities": {
+            "get": {
+                "tags": [
+                    "Activities",
+                    "Trilio"
+                ],
+                "summary": "The resource collection",
+                "description": "The resource collection",
+                "operationId": "Trilio/Api/ActivityController::index",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search the resource by name or description",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "projectUuid",
+                        "in": "query",
+                        "description": "Scope the activities to project uuid. pass false if not required",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "quantity",
+                        "in": "query",
+                        "description": "The quantity",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The resource collection",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ActivityResource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/422"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/500"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Activities",
+                    "Trilio"
+                ],
+                "summary": "Create new activity",
+                "description": "Create new activity",
+                "operationId": "Trilio/Api/ActivityController::store",
+                "parameters": [
+                    {
+                        "name": "projectUuid",
+                        "in": "path",
+                        "description": "The project uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Create new activity",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ActivityRequest"
+                            },
+                            "example": {
+                                "name": "The brown fox",
+                                "start_date": "2025-06-11 10:25:46",
+                                "end_date": "2025-06-11 10:25:46",
+                                "description": "The quick brown fox project test creation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "success.",
+                                    "status": true,
+                                    "data": {
+                                        "name": "The brown fox",
+                                        "uuid": "ashjvdHJSVDXSjdhHGVDGHJVGHD-AJBHGD",
+                                        "id": "2",
+                                        "status": "PENDING",
+                                        "start_date": "2022-09-08T12:29:54.000000Z",
+                                        "end_date": "2022-09-08T12:29:54.000000Z",
+                                        "description": "The quick brown fox project test creation",
+                                        "createdAt": "2022-09-08T12:29:54.000000Z",
+                                        "updatedAt": "2022-09-08T12:29:54.000000Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/422"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/500"
+                    }
+                }
+            }
+        },
+        "/trilio/projects/activities/{activityid}": {
+            "get": {
+                "tags": [
+                    "Activities",
+                    "Trilio"
+                ],
+                "summary": "The activity resource",
+                "description": "The activity resource.",
+                "operationId": "Trilio/Api/ActivityController::show",
+                "parameters": [
+                    {
+                        "name": "Activityuid",
+                        "in": "path",
+                        "description": "The activity uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "success",
+                                    "status": true
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/422"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/500"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/trilio/projects/activities/{activityuid}": {
+            "delete": {
+                "tags": [
+                    "Activities",
+                    "Trilio"
+                ],
+                "summary": "The delete activity resource",
+                "description": "The activity resource.",
+                "operationId": "Api/Trilio/Api/ActivityController::destroy",
+                "parameters": [
+                    {
+                        "name": "activityuid",
+                        "in": "path",
+                        "description": "The activity uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "success",
+                                    "status": true
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/422"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/500"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Activities",
+                    "Trilio"
+                ],
+                "summary": "Update activity record",
+                "description": "Update activity record.",
+                "operationId": "Trilio/Api/ActivityController::update",
+                "parameters": [
+                    {
+                        "name": "activityuid",
+                        "in": "path",
+                        "description": "The activity resource uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Update activity resource.",
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ActivityRequest"
+                            },
+                            "example": {
+                                "name": "The brown fox",
+                                "start_date": "2025-06-11 10:25:46",
+                                "end_date": "2025-06-11 10:25:46",
+                                "description": "The quick brown fox project test creation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "The updated resource.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "success",
+                                    "status": true,
+                                    "data": {
+                                        "name": "The brown fox",
+                                        "description": "The quick brown fox project test creation"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/422"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/500"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/trilio/projects": {
+            "get": {
+                "tags": [
+                    "Projects",
+                    "Trilio"
+                ],
+                "summary": "The resource collection",
+                "description": "The resource collection",
+                "operationId": "Trilio/Api/ProjectController::index",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search the resource by name or description",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "quantity",
+                        "in": "query",
+                        "description": "The quantity",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The resource collection",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ProjectResource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/422"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/500"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Projects",
+                    "Trilio"
+                ],
+                "summary": "Create new projects",
+                "description": "Create new project",
+                "operationId": "Trilio/Api/ProjectController::store",
+                "requestBody": {
+                    "description": "Create new project",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProjectRequest"
+                            },
+                            "example": {
+                                "name": "The brown fox",
+                                "description": "The quick brown fox project test creation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "success.",
+                                    "status": true,
+                                    "data": {
+                                        "name": "The brown fox",
+                                        "uuid": "ashjvdHJSVDXSHGVDGHJVGHD-AJBHGD",
+                                        "id": "2",
+                                        "status": "null",
+                                        "description": "The quick brown fox project test creation",
+                                        "createdAt": "2022-09-08T12:29:54.000000Z",
+                                        "updatedAt": "2022-09-08T12:29:54.000000Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/422"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/500"
+                    }
+                }
+            }
+        },
+        "/trilio/projects/{projectUuid}": {
+            "get": {
+                "tags": [
+                    "Projects",
+                    "Trilio"
+                ],
+                "summary": "The project resource",
+                "description": "The project resource.",
+                "operationId": "Trilio/Api/ProjectController::show",
+                "parameters": [
+                    {
+                        "name": "projectUuid",
+                        "in": "path",
+                        "description": "The project uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "success",
+                                    "status": true
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/422"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/500"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Projects",
+                    "Trilio"
+                ],
+                "summary": "The delete project resource",
+                "description": "The project resource.",
+                "operationId": "Trilio/Api/ProjectController::destroy",
+                "parameters": [
+                    {
+                        "name": "projectUuid",
+                        "in": "path",
+                        "description": "The project uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "success",
+                                    "status": true
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/422"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/500"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Projects",
+                    "Trilio"
+                ],
+                "summary": "Update project record",
+                "description": "Update project record.",
+                "operationId": "Trilio/Api/ProjectController::update",
+                "parameters": [
+                    {
+                        "name": "projectUuid",
+                        "in": "path",
+                        "description": "The project resource uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Update activity resource.",
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProjectRequest"
+                            },
+                            "example": {
+                                "name": "The brown fox",
+                                "description": "The quick brown fox project test creation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "The updated resource.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "success",
+                                    "status": true,
+                                    "data": {
+                                        "name": "The brown fox",
+                                        "description": "The quick brown fox project test creation"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/422"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/500"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
         }
     },
     "components": {
         "schemas": {
+            "ActivityRequest": {
+                "properties": {
+                    "name": {
+                        "description": "The activity name",
+                        "type": "string"
+                    },
+                    "status": {
+                        "description": "The activity status",
+                        "type": "string"
+                    },
+                    "description": {
+                        "description": "The activity description",
+                        "type": "string"
+                    },
+                    "start_date": {
+                        "description": "The activity start_date",
+                        "type": "string"
+                    },
+                    "end_date": {
+                        "description": "The activity end_date",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "ApiLoginRequest": {
                 "properties": {
                     "email": {
@@ -1876,6 +2615,23 @@
                     "photo": {
                         "description": "The user profile photo",
                         "type": "file"
+                    }
+                },
+                "type": "object"
+            },
+            "ProjectRequest": {
+                "properties": {
+                    "name": {
+                        "description": "The project name",
+                        "type": "string"
+                    },
+                    "status": {
+                        "description": "The project status",
+                        "type": "string"
+                    },
+                    "description": {
+                        "description": "The project description",
+                        "type": "string"
                     }
                 },
                 "type": "object"
@@ -2010,6 +2766,45 @@
                 },
                 "type": "object"
             },
+            "ActivityResource": {
+                "properties": {
+                    "id": {
+                        "description": "The project Id.",
+                        "type": "string"
+                    },
+                    "name": {
+                        "description": "The role name.",
+                        "type": "string"
+                    },
+                    "uuid": {
+                        "description": "The project uuid.",
+                        "type": "string"
+                    },
+                    "ownerId": {
+                        "description": "The project ownerId.",
+                        "type": "string"
+                    },
+                    "slug": {
+                        "description": "The project slug to support S.E.O.",
+                        "type": "string"
+                    },
+                    "description": {
+                        "description": "The project description.",
+                        "type": "string"
+                    },
+                    "start_date": {
+                        "description": "The role start_date.",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "end_date": {
+                        "description": "The project end_date.",
+                        "type": "string",
+                        "format": "date"
+                    }
+                },
+                "type": "object"
+            },
             "MessageResource": {
                 "properties": {
                     "id": {
@@ -2038,6 +2833,35 @@
                     },
                     "updated_at": {
                         "description": "The resource updated date.",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "ProjectResource": {
+                "properties": {
+                    "id": {
+                        "description": "The project Id.",
+                        "type": "string"
+                    },
+                    "name": {
+                        "description": "The role name.",
+                        "type": "string"
+                    },
+                    "uuid": {
+                        "description": "The project uuid.",
+                        "type": "string"
+                    },
+                    "ownerId": {
+                        "description": "The project ownerId.",
+                        "type": "string"
+                    },
+                    "slug": {
+                        "description": "The project slug to support S.E.O.",
+                        "type": "string"
+                    },
+                    "description": {
+                        "description": "The project description.",
                         "type": "string"
                     }
                 },

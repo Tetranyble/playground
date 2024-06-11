@@ -27,7 +27,7 @@ jobs:
         run: php backend/artisan key:generate
 
       - name: Directory Permissions
-        run: chmod -R 777 storage backend/bootstrap/cache
+        run: chmod -R 777 backend/storage backend/bootstrap/cache
 
       - name: Install npm packages
         run: cd backend && npm install --error && npm run build
@@ -38,7 +38,7 @@ jobs:
           touch backend/database/database.sqlite
 
       - name: Run Code Format
-        run:  cd backend && vendor/bin/phpunit --preset=laravel --verbose
+        run:  cd backend && php artisan pint:clean
 
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         env:
