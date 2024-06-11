@@ -38,7 +38,7 @@ jobs:
           touch backend/database/database.sqlite
 
       - name: Run Code Format
-        run:  cd backend && php ./vendor/bin/phpunit --preset=laravel --verbose
+        run:  cd backend && php artisan pint:clean
 
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         env:
