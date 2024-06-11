@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Trilio;
 
+use App\Models\Activity;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -35,5 +36,17 @@ class ProjectTest extends TestCase
 
         $this->assertEquals($owner->id, $project->user_id);
         $this->assertInstanceOf(User::class, $project->user);
+    }
+
+    /** @test */
+    public function a_project_has_activities()
+    {
+        $project = Project::factory()->create();
+        $activity = Activity::factory(10)->create([
+            'project_id' => $project->id,
+        ]);
+
+        $this->assertCount(10, $project->activities);
+
     }
 }

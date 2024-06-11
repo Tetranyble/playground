@@ -19,7 +19,7 @@ class ProjectFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'name' => $this->faker->sentence,
+            'name' => $this->faker->word,
             'description' => $this->faker->paragraph,
             'status' => $this->faker->dateTime,
             'slug' => $this->faker->slug,

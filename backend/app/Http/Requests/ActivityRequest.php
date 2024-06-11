@@ -2,30 +2,42 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\TrilioStatus;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 /**
- * @OA\Schema(schema="ProjectRequest")
+ * @OA\Schema(schema="ActivityRequest")
  * {
  *
  *   @OA\Property(
  *     property="name",
  *     type="string",
- *     description="The project name"
+ *     description="The activity name"
  *   ),
  *   @OA\Property(
  *      property="status",
  *      type="string",
- *      description="The project status"
+ *      description="The activity status"
  *    ),
  *   @OA\Property(
  *     property="description",
  *     type="string",
- *     description="The project description"
- *   )
+ *     description="The activity description"
+ *   ),
+ *   @OA\Property(
+ *       property="start_date",
+ *       type="string",
+ *       description="The activity start_date"
+ *     ),
+ *   @OA\Property(
+ *      property="end_date",
+ *      type="string",
+ *      description="The activity end_date"
+ *    )
  * }
  */
-class ProjectRequest extends FormRequest
+class ActivityRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -45,7 +57,9 @@ class ProjectRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:10000',
-            'status' => 'nullable|date_format:Y-m-d H:i:s'
+            'start_date' => 'nullable|date_format:Y-m-d H:i:s',
+            'end_date' => 'nullable|date_format:Y-m-d H:i:s|after:start_date',
+            'status' => ['nullable', new Enum(TrilioStatus::class)]
         ];
     }
 }

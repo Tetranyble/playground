@@ -131,5 +131,18 @@ Route::name('v1.')->prefix('v1')->group(function () {
             ->name('projects.update');
         Route::delete('projects/{project:uuid}', [\App\Http\Controllers\Trilio\Api\ProjectController::class, 'destroy'])
             ->name('projects.destroy');
+
+        Route::get('projects/{project:uuid}/activities', [\App\Http\Controllers\Trilio\Api\ActivityController::class, 'index'])
+            ->name('activities.index');
+        //->middleware('can:viewAny');
+        Route::get('projects/activities/{activity:uuid}', [\App\Http\Controllers\Trilio\Api\ActivityController::class, 'show'])
+            ->name('activities.show');
+        //->middleware('can:view');
+        Route::post('projects/{project:uuid}/activities', [\App\Http\Controllers\Trilio\Api\ActivityController::class, 'store'])
+            ->name('activities.store');
+        Route::patch('projects/activities/{activity:uuid}', [\App\Http\Controllers\Trilio\Api\ActivityController::class, 'update'])
+            ->name('activities.update');
+        Route::delete('projects/activities/{activity:uuid}', [\App\Http\Controllers\Trilio\Api\ActivityController::class, 'destroy'])
+            ->name('activities.destroy');
     });
 });

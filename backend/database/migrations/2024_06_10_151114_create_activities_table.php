@@ -11,20 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('projects', function (Blueprint $table) {
+        Schema::create('activities', function (Blueprint $table) {
             $table->id();
             $table->uuid();
-            $table->string('name');
             $table->string('slug');
+            $table->string('name');
             $table->text('description')->nullable();
-            $table->dateTime('status')->nullable();
-            $table->unsignedBigInteger('user_id')->index();
+            $table->dateTime('start_date')->nullable();
+            $table->dateTime('end_date')->nullable();
+            $table->string('status')->default(\App\Enums\TrilioStatus::PENDING->value);
+            $table->unsignedBigInteger('project_id')->index();
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('user_id')
+            $table->foreign('project_id')
                 ->references('id')
-                ->on('users')
+                ->on('projects')
                 ->cascadeOnDelete();
         });
     }
@@ -34,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('projects');
+        Schema::dropIfExists('activities');
     }
 };

@@ -3,58 +3,63 @@
 namespace App\Http\Controllers\Trilio\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ActivityRequest;
 use App\Http\Requests\GeneralRequest;
-use App\Http\Requests\ProjectRequest;
+use App\Http\Resources\ActivityCollection;
+use App\Http\Resources\ActivityResource;
 use App\Http\Resources\ProjectCollection;
 use App\Http\Resources\ProjectResource;
+use App\Models\Activity;
 use App\Models\Project;
-use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
-class ProjectController extends Controller
+class ActivityController extends Controller
 {
     /**
      * @OA\Get(
-     *     path="/trilio/projects",
-     *     tags={"Projects", "Trilio"},
+     *     path="/trilio/projects/{projectUuid}/activities",
+     *     tags={"Activities", "Trilio"},
      *     security={ * {"sanctum": {} } * },
      *     summary="The resource collection",
      *     description="The resource collection",
-     *     operationId="Trilio/Api/ProjectController::index",
+     *     operationId="Trilio/Api/ActivityController::index",
      *
      *     @OA\Parameter(
      *         name="search",
      *         in="query",
      *         description="Search the resource by name or description",
      *         required=false,
-     *
      *         @OA\Schema(
      *             type="string",
      *         )
      *     ),
-     *
+     *     @OA\Parameter(
+     *          name="projectUuid",
+     *          in="query",
+     *          description="Scope the activities to project uuid. pass false if not required",
+     *          required=false,
+     *          @OA\Schema(
+     *              type="string",
+     *          )
+     *      ),
      *     @OA\Parameter(
      *         name="quantity",
      *         in="query",
      *         description="The quantity",
      *         required=false,
-     *
      *         @OA\Schema(
      *             type="integer",
      *         )
      *     ),
-     *
      *     @OA\Response(
      *         response=200,
      *         description="The resource collection",
-     *
      *         @OA\JsonContent(
      *             type="array",
-     *
-     *             @OA\Items(ref="#/components/schemas/ProjectResource")
+     *             @OA\Items(ref="#/components/schemas/ActivityResource")
      *         )
      *     ),
-     *
      *    @OA\Response(response=400, ref="#/components/responses/400"),
      *    @OA\Response(response=403, ref="#/components/responses/403"),
      *    @OA\Response(response=404, ref="#/components/responses/404"),
@@ -63,37 +68,49 @@ class ProjectController extends Controller
      * )
      * Display a listing of the resource.
      *
-     * @return ProjectCollection
+     * @return ActivityCollection
      */
-    public function index(GeneralRequest $request)
+    public function index(GeneralRequest $request, Project $project)
     {
-        $projects = (new Project())
+        $activities = (new Activity())
+            ->activityFor($project)
             ->search($request->search ?? '')
             ->paginate($request->quantity);
 
-        return new ProjectCollection($projects);
+        return new ActivityCollection($activities);
     }
 
     /**
      * @OA\Post(
-     * path="/trilio/projects",
-     * operationId="Trilio/Api/ProjectController::store",
-     * tags={"Projects", "Trilio"},
-     * summary="Create new projects",
-     * description="Create new project",
+     * path="/trilio/projects/{projectUuid}/activities",
+     * operationId="Trilio/Api/ActivityController::store",
+     * tags={"Activities", "Trilio"},
+     * summary="Create new activity",
+     * description="Create new activity",
+     *     @OA\Parameter(
+     *          name="projectUuid",
+     *          in="path",
+     *          description="The project uuid",
+     *          required=true,
      *
+     *          @OA\Schema(
+     *              type="string",
+     *          )
+     *      ),
      *    @OA\RequestBody(
-     *         description="Create new project",
+     *         description="Create new activity",
      *         required=true,
      *
      *         @OA\MediaType(
      *             mediaType="application/json",
      *             example={
      *                 "name": "The brown fox",
+     *                 "start_date": "2025-06-11 10:25:46",
+     *                 "end_date": "2025-06-11 10:25:46",
      *                 "description": "The quick brown fox project test creation",
      *             },
      *
-     *             @OA\Schema(ref="#/components/schemas/ProjectRequest")
+     *             @OA\Schema(ref="#/components/schemas/ActivityRequest")
      *         )
      *     ),
      *
@@ -108,9 +125,11 @@ class ProjectController extends Controller
      *                 "status": true,
      *                 "data": {
      *                     "name" : "The brown fox",
-     *                     "uuid" : "ashjvdHJSVDXSHGVDGHJVGHD-AJBHGD",
+     *                     "uuid" : "ashjvdHJSVDXSjdhHGVDGHJVGHD-AJBHGD",
      *                     "id" : "2",
-     *                     "status" : "null",
+     *                     "status" : "PENDING",
+     *                     "start_date" : "2022-09-08T12:29:54.000000Z",
+     *                     "end_date" : "2022-09-08T12:29:54.000000Z",
      *                     "description" : "The quick brown fox project test creation",
      *                     "createdAt" : "2022-09-08T12:29:54.000000Z",
      *                     "updatedAt" : "2022-09-08T12:29:54.000000Z"
@@ -129,47 +148,43 @@ class ProjectController extends Controller
      *
      * @return JsonResponse
      */
-    public function store(ProjectRequest $request)
+    public function store(ActivityRequest $request, Project $project)
     {
-        $project = Project::create([
-            ...$request->only(['name', 'description']),
-            'user_id' => $request->user('api')->id,
+        $activity = Activity::create([
+            ...$request->only(['name', 'description', 'project_id','start_date', 'end_date', 'status']),
+            'project_id' => $project->id,
         ]);
 
         return $this->created(
-            new ProjectResource($project),
+            new ActivityResource($activity->refresh()),
             'success'
         );
     }
 
     /**
      * @OA\Get (
-     *     path="/trilio/projects/{projectUuid}",
-     *     summary="The project resource",
-     *     description="The project resource",
-     *     operationId="Trilio/Api/ProjectController::show",
+     *     path="/trilio/projects/activities/{activityid}",
+     *     summary="The activity resource",
+     *     description="The activity resource",
+     *     operationId="Trilio/Api/ActivityController::show",
      *     security={ * {"sanctum": {} } * },
-     *     description="The project resource.",
-     *     tags={"Projects", "Trilio"},
+     *     description="The activity resource.",
+     *     tags={"Activities", "Trilio"},
      *
      *     @OA\Parameter(
-     *         name="projectUuid",
+     *         name="Activityuid",
      *         in="path",
-     *         description="The project uuid",
+     *         description="The activity uuid",
      *         required=true,
-     *
      *         @OA\Schema(
      *             type="string",
      *         )
      *     ),
-     *
      *     @OA\Response(
      *         response=200,
      *         description="success",
-     *
      *         @OA\JsonContent(
-     *
-     *             @OA\Schema(ref="#/components/schemas/ProjectResource"),
+     *             @OA\Schema(ref="#/components/schemas/ActivityResource"),
      *             type="object",
      *             example={
      *                 "message":"success",
@@ -177,7 +192,6 @@ class ProjectController extends Controller
      *             }
      *         )
      *     ),
-     *
      *    @OA\Response(response=400, ref="#/components/responses/400"),
      *    @OA\Response(response=404, ref="#/components/responses/404"),
      *    @OA\Response(response=422, ref="#/components/responses/422"),
@@ -187,52 +201,50 @@ class ProjectController extends Controller
      *
      * @return JsonResponse
      */
-    public function show(Project $project)
+    public function show(Activity $activity)
     {
         return $this->success(
-            new ProjectResource($project),
+            new ActivityResource($activity),
             'success'
         );
     }
 
     /**
      * @OA\Patch (
-     * path="/trilio/projects/{projectUuid}",
-     * operationId="Trilio/Api/ProjectController::update",
-     * tags={"Projects", "Trilio"},
-     * summary="Update project record",
+     * path="/trilio/projects/activities/{activityuid}",
+     * operationId="Trilio/Api/ActivityController::update",
+     * tags={"Activities", "Trilio"},
+     * summary="Update activity record",
      * security={ * {"sanctum": {} } * },
-     * description="Update project record.",
+     * description="Update activity record.",
      *
      *     @OA\Parameter(
-     *          name="projectUuid",
+     *          name="activityuid",
      *          in="path",
-     *          description="The project resource uuid",
+     *          description="The activity resource uuid",
      *          required=true,
-     *
      *          @OA\Schema(
      *              type="string",
      *          )
      *      ),
-     *
      *    @OA\RequestBody(
      *         description="Update activity resource.",
      *         required=false,
-     *
      *         @OA\MediaType(
      *             mediaType="application/json",
      *             example={
      *                 "name": "The brown fox",
+     *                 "start_date": "2025-06-11 10:25:46",
+     *                 "end_date": "2025-06-11 10:25:46",
      *                 "description": "The quick brown fox project test creation",
      *             },
-     *
-     *             @OA\Schema(ref="#/components/schemas/ProjectRequest")
+     *             @OA\Schema(ref="#/components/schemas/ActivityRequest")
      *         )
      *     ),
-     *
      *     @OA\Response(
      *         response=200,
      *         description="The updated resource.",
+     *
      *         @OA\JsonContent(
      *             type="object",
      *             example={
@@ -256,46 +268,42 @@ class ProjectController extends Controller
      *
      * @return mixed
      */
-    public function update(ProjectRequest $request, Project $project)
+    public function update(Request $request, Activity $activity)
     {
-
-        $project->fill(
-            array_filter($request->all())
+        $activity->fill(
+            array_filter($request->except('__token'))
         )->save();
 
         return $this->success(
-            new ProjectResource($project->refresh()),
+            new ActivityResource($activity->refresh()),
             'success'
         );
     }
 
     /**
      * @OA\Delete (
-     *     path="/trilio/projects/{projectUuid}",
-     *     summary="The delete project resource",
-     *     description="The delete project resource",
-     *     operationId="Trilio/Api/ProjectController::destroy",
+     *     path="/trilio/projects/activities/{activityuid}",
+     *     summary="The delete activity resource",
+     *     description="The delete activity resource",
+     *     operationId="Api/Trilio/Api/ActivityController::destroy",
      *     security={ * {"sanctum": {} } * },
-     *     description="The project resource.",
-     *     tags={"Projects", "Trilio"},
-     *
+     *     description="The activity resource.",
+     *     tags={"Activities", "Trilio"},
      *     @OA\Parameter(
-     *         name="projectUuid",
+     *         name="activityuid",
      *         in="path",
-     *         description="The project uuid",
+     *         description="The activity uuid",
      *         required=true,
-     *
      *         @OA\Schema(
      *             type="string",
      *         )
      *     ),
-     *
      *     @OA\Response(
      *         response=204,
      *         description="success",
      *         @OA\JsonContent(
      *
-     *             @OA\Schema(ref="#/components/schemas/ProjectResource"),
+     *             @OA\Schema(ref="#/components/schemas/ActivityResource"),
      *             type="object",
      *             example={
      *                 "message":"success",
@@ -313,9 +321,9 @@ class ProjectController extends Controller
      *
      * @return JsonResponse
      */
-    public function destroy(Project $project)
+    public function destroy(Activity $activity)
     {
-        $project->delete();
+        $activity->delete();
 
         return $this->delete([], 'success');
     }

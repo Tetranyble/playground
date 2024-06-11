@@ -8,10 +8,12 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Project extends Model
 {
-    use HasFactory, Sluggable, Uuidable;
+    use HasFactory, Sluggable, Uuidable, SoftDeletes;
 
     protected $fillable = [
         'user_id',
@@ -39,6 +41,19 @@ class Project extends Model
 
     }
 
+    /**
+     * Get activities
+     * @return HasMany
+     */
+    public function activities(): HasMany
+    {
+        return $this->hasMany(Activity::class, 'project_id');
+    }
+    /**
+     * @param Builder $builder
+     * @param string|null $terms
+     * @return Builder
+     */
     public function scopeSearch(Builder $builder, ?string $terms = null): Builder
     {
         return $builder->where(function ($builder) use ($terms) {
