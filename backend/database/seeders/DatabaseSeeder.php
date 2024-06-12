@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Project;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -19,6 +20,7 @@ class DatabaseSeeder extends Seeder
         if (app()->environment(['local', 'staging'])) {
             $this->call([
                 UserSeeder::class,
+                ProjectSeeder::class,
             ]);
         }
     }

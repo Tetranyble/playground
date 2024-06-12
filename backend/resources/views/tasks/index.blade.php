@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
+            {{ __('Tasks') }}
         </h2>
     </x-slot>
 
@@ -14,10 +14,10 @@
                         <div class="rounded-t mb-0 px-4 py-3 border-0">
                             <div class="flex flex-wrap items-center">
                                 <div class="relative w-full px-4 max-w-full flex-grow flex-1">
-                                    <h3 class="font-semibold text-base text-blueGray-700">Activity</h3>
+                                    <h3 class="font-semibold text-base text-blueGray-700">Tasks</h3>
                                 </div>
                                 <div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
-                                    <a class="" href="{{ route('activities.create') }}">Create Activity</a>
+                                    <a class="" href="{{ route('tasks.create', ['activity' => request()->route('activity')]) }}">Create Task</a>
                                 </div>
                             </div>
                         </div>
@@ -45,6 +45,9 @@
                                                 Status
                                             </th>
                                             <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                                Priority
+                                            </th>
+                                            <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
                                                 Created At
                                             </th>
                                             <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
@@ -53,23 +56,30 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @forelse($activities as $activity)
+                                        @forelse($tasks as $task)
                                             <tr class="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{$activity->id}}</td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{$task->id}}</td>
                                                 <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                                    {{ $activity->name }}
+                                                    {{ $task->name }}
                                                 </td>
                                                 <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                                    {{ $activity->description }}
+                                                    {{ $task->description }}
                                                 </td>
                                                 <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                                    {{ $activity->status === null ? 'Pending' : 'Completed' }}
+                                                    {{ $task->status->value }}
                                                 </td>
                                                 <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                                    {{ $activity->created_at }}
+                                                    {{ $task->priority->value }}
+                                                </td>
+                                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                                    {{ $task->created_at }}
                                                 </td>
                                                 <td>
-                                                    <a href="{{ route('activities.tasks.index', ['activity' => $activity->id]) }}" class="p-2 pl-5 pr-5 bg-transparent border-2 border-indigo-500 text-indigo-500 text-lg rounded-lg transition-colors duration-700 transform hover:bg-indigo-500 hover:text-gray-100 focus:border-4 focus:border-indigo-300">Tasks</a>
+                                                    <form method="POST" action="{{ route('tasks.destroy', ['task' => $task->id]) }}">
+                                                        @method('DELETE')
+                                                        @csrf
+                                                        <button type="submit"  class="p-2 pl-5 pr-5 bg-transparent border-2 border-indigo-500 text-indigo-500 rounded-lg transition-colors duration-700 transform hover:bg-indigo-500 hover:text-gray-100 focus:border-4 focus:border-indigo-300">Delete</button>
+                                                    </form>
                                                 </td>
                                             </tr>
                                         @empty
@@ -80,7 +90,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="py-6 px-6">{{ $activities->links() }}</div>
+                                <div class="py-6 px-6">{{ $tasks->links() }}</div>
                             </div>
                         </div>
                     </div>
