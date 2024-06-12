@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\Priority;
 use App\Enums\TrilioStatus;
-use App\Traits\Sluggable;
 use App\Traits\Uuidable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,34 +11,29 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Activity extends Model
+class Task extends Model
 {
-    use HasFactory, Sluggable, SoftDeletes, Uuidable;
+    use HasFactory, SoftDeletes, Uuidable;
 
     protected $fillable = [
-        'user_id',
+        'due_date',
         'name',
         'description',
-        'uuid',
         'status',
-        'slug',
-        'start_date',
-        'end_date',
-        'project_id',
+        'priority',
+        'activity_id',
+        'uuid',
     ];
 
     protected $casts = [
-        'start_date' => 'datetime',
-        'end_date' => 'datetime',
+        'due_date' => 'datetime',
+        'priority' => Priority::class,
         'status' => TrilioStatus::class,
     ];
 
-    /**
-     * Get the owner of this project
-     */
-    public function project(): BelongsTo
+    public function activity(): BelongsTo
     {
-        return $this->belongsTo(Project::class, 'project_id');
+        return $this->belongsTo(Activity::class, 'activity_id');
     }
 
     public function scopeSearch(Builder $builder, ?string $terms = null): Builder
@@ -56,20 +51,20 @@ class Activity extends Model
     /**
      * Scopes the query to given project(s))
      *
-     * @param  Project[]|string[]  ...$projects
+     * @param  Activity[]|string[]  ...$activities
      */
-    public function scopeActivityFor(Builder $builder, ...$projects): Builder
+    public function scopeTaskFor(Builder $builder, ...$activities): Builder
     {
-        return $builder->when(array_filter($projects), function ($q) use ($projects) {
-            $q->where(function ($q) use ($projects) {
-                collect($projects)->map(function ($project) use ($q) {
-                    return $project instanceof Project ?
-                        $q->orWhere('project_id', $project->id) : (
-                            is_numeric($project) ? $q->orWhere('project_id', $project) :
-                                $q->orWhere('project_id', function ($q) use ($project) {
-                                    $q->from('projects')
+        return $builder->when(array_filter($activities), function ($q) use ($activities) {
+            $q->where(function ($q) use ($activities) {
+                collect($activities)->map(function ($activity) use ($q) {
+                    return $activity instanceof Activity ?
+                        $q->orWhere('activity_id', $activity->id) : (
+                            is_numeric($activity) ? $q->orWhere('activity_id', $activity) :
+                                $q->orWhere('activity_id', function ($q) use ($activity) {
+                                    $q->from('activities')
                                         ->select('id')
-                                        ->where('uuid', $project);
+                                        ->where('uuid', $activity);
                                 })
                         );
                 });

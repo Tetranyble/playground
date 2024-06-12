@@ -2,8 +2,9 @@
 
 namespace Tests\Feature\Trilio;
 
-use App\Models\Project;
+use App\Models\Activity;
 use App\Models\Role;
+use App\Models\Task;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -11,7 +12,7 @@ use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\Supports\PermissionSupport;
 use Tests\TestCase;
 
-class ProjectTest extends TestCase
+class TaskTest extends TestCase
 {
     use PermissionSupport, RefreshDatabase , WithFaker;
 
@@ -24,17 +25,20 @@ class ProjectTest extends TestCase
             'name' => 'manager',
         ]);
         $this->user->assignRoles('manager');
-        $this->permissions('Project');
+        $this->permissions('Task');
+        $this->activity = Activity::factory()->create();
     }
 
     /** @test */
-    public function a_project_owner_may_view_projects(): void
+    public function a_tasks_owner_may_view_tasks(): void
     {
-        Project::factory(20)->create([
-            'user_id' => $this->user->id,
+        Task::factory(20)->create([
+            'activity_id' => $this->activity->id,
         ]);
         $response = $this->actingAs($this->user, 'api')
-            ->getJson(route('v1.trilio.projects.index'))
+            ->getJson(route('v1.trilio.tasks.index', [
+                'activity' => $this->activity->uuid,
+            ]))
             ->assertStatus(200);
         $response->assertJson(fn (AssertableJson $json) => $json->has('status')
             ->has('message')
@@ -48,56 +52,62 @@ class ProjectTest extends TestCase
     }
 
     /** @test */
-    public function given_a_project_uuid_a_project_owner_may_view_project(): void
+    public function given_a_task_uuid_a_task_may_be_viewed(): void
     {
-        $project = Project::factory()->create([
-            'user_id' => $this->user->id,
+        $task = Task::factory()->create([
+            'activity_id' => $this->activity->id,
         ]);
         $response = $this->actingAs($this->user, 'api')
-            ->getJson(route('v1.trilio.projects.show', [
-                'project' => $project->uuid,
+            ->getJson(route('v1.trilio.tasks.show', [
+                'task' => $task->uuid,
             ]))
             ->assertStatus(200);
 
         $response->assertJson(fn (AssertableJson $json) => $json
             ->where('status', true)
             ->where('message', 'success')
-            ->where('data.uuid', $project->uuid)
-            ->where('data.id', $project->id)
-            ->where('data.ownerId', $this->user->id)
+            ->where('data.uuid', $task->uuid)
+            ->where('data.id', $task->id)
+            ->where('data.name', $task->name)
             ->etc()
         );
 
     }
 
     /** @test */
-    public function a_user_may_create_new_project(): void
+    public function a_user_may_create_a_new_task(): void
     {
         $response = $this->actingAs($this->user, 'api')
-            ->postJson(route('v1.trilio.projects.store'),
+            ->postJson(route('v1.trilio.tasks.store', [
+                'activity' => $this->activity->uuid,
+            ]),
                 [
-                    'name' => 'new project',
-                    'description' => 'new project description',
+                    'name' => 'new activity',
+                    'description' => 'new activity description',
+                    'due_date' => now()->format('Y-m-d H:i:s'),
+                    'priority' => 'LOW'
                 ]
             )->assertStatus(201);
 
         $response->assertJson(fn (AssertableJson $json) => $json
             ->where('status', true)
             ->where('message', 'success')
-            ->where('data.name', 'new project')
+            ->where('data.name', 'new activity')
+            ->where('data.activityId', $this->activity->id)
+
             ->etc()
         );
 
     }
 
     /** @test */
-    public function given_a_project_uuid_project_owner_may_update_owns_project(): void
+    public function given_a_task_uuid_may_be_patch(): void
     {
-        $project = Project::factory()->create([
-            'user_id' => $this->user->id,
+        $task = Task::factory()->create([
+            'activity_id' => $this->activity->id,
         ]);
         $response = $this->actingAs($this->user, 'api')
-            ->patchJson(route('v1.trilio.projects.update', ['project' => $project->uuid]),
+            ->patchJson(route('v1.trilio.tasks.update', ['task' => $task->uuid]),
                 [
                     'name' => 'Update name',
                     'description' => 'syndication',
@@ -114,18 +124,18 @@ class ProjectTest extends TestCase
     }
 
     /** @test */
-    public function given_a_project_uuid_a_project_owner_may_delete_project(): void
+    public function given_a_task_uuid_it_may_be_deleted(): void
     {
-        $project = Project::factory()->create([
-            'user_id' => $this->user->id,
+        $task = Task::factory()->create([
+            'activity_id' => $this->activity->id,
         ]);
         $response = $this->actingAs($this->user, 'api')
-            ->deleteJson(route('v1.trilio.projects.destroy', [
-                'project' => $project->uuid,
+            ->deleteJson(route('v1.trilio.tasks.destroy', [
+                'task' => $task->uuid,
             ]))
             ->assertStatus(204);
-        $this->assertSoftDeleted('projects', [
-            'id' => $project->id,
+        $this->assertSoftDeleted('tasks', [
+            'id' => $task->id,
         ]);
 
     }

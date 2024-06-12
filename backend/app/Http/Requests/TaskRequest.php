@@ -2,42 +2,38 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\Priority;
 use App\Enums\TrilioStatus;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 
 /**
- * @OA\Schema(schema="ActivityRequest")
+ * @OA\Schema(schema="TaskRequest")
  * {
  *
  *   @OA\Property(
  *     property="name",
  *     type="string",
- *     description="The activity name"
+ *     description="The task name"
  *   ),
  *   @OA\Property(
  *      property="status",
  *      type="string",
- *      description="The activity status"
+ *      description="The task status"
  *    ),
  *   @OA\Property(
  *     property="description",
  *     type="string",
- *     description="The activity description"
+ *     description="The task description"
  *   ),
  *   @OA\Property(
- *       property="start_date",
+ *       property="due_date",
  *       type="string",
- *       description="The activity start_date"
- *     ),
- *   @OA\Property(
- *      property="end_date",
- *      type="string",
- *      description="The activity end_date"
- *    )
+ *       description="The task start_date"
+ *     )
  * }
  */
-class ActivityRequest extends FormRequest
+class TaskRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -57,9 +53,9 @@ class ActivityRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:10000',
-            'start_date' => 'nullable|date_format:Y-m-d H:i:s',
-            'end_date' => 'nullable|date_format:Y-m-d H:i:s|after:start_date',
+            'due_date' => 'nullable|date_format:Y-m-d H:i:s',
             'status' => ['nullable', new Enum(TrilioStatus::class)],
+            'priority' => ['nullable', new Enum(Priority::class)],
         ];
     }
 }

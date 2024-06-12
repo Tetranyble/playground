@@ -6,52 +6,52 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @OA\Schema(schema="ActivityResource")
+ * @OA\Schema(schema="TaskResource")
  * {
  *
  *   @OA\Property(
  *     property="id",
  *     type="string",
- *     description="The activity Id."
+ *     description="The task Id."
  *   ),
  *   @OA\Property(
  *     property="name",
  *     type="string",
- *     description="The role name."
+ *     description="The task name."
  *   ),
  *   @OA\Property(
  *     property="uuid",
  *     type="string",
- *     description="The activity uuid."
+ *     description="The task uuid."
  *   ),
  *  @OA\Property(
- *      property="projectId",
+ *      property="activityId",
  *      type="string",
- *      description="The activity projectId."
+ *      description="The task activityId."
  *    ),
  *   @OA\Property(
- *       property="slug",
- *       type="string",
- *       description="The activity slug to support S.E.O."
+ *       property="due_date",
+ *       type="date",
+ *       description="The task due date."
  *     ),
  *   @OA\Property(
  *     property="description",
  *     type="string",
- *     description="The activity description."
+ *     description="The task description."
  *   ),
  *   @OA\Property(
- *      property="start_date",
+ *      property="priority",
  *      type="date",
- *      description="The role start_date."
+ *      description="The task resource priority."
  *    ),
  *   @OA\Property(
- *      property="end_date",
+ *      property="status",
  *      type="date",
- *      description="The activity end_date."
+ *      description="The resource task status."
  *    ),
  * }
  */
-class ActivityResource extends JsonResource
+class TaskResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -62,15 +62,16 @@ class ActivityResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'uuid' => $this->uuid,
-            'status' => $this->status->value,
+            'due_date' => $this->due_date,
             'name' => $this->name,
             'description' => $this->description,
-            'start_date' => $this->start_date,
-            'end_date' => $this->end,
+            'status' => $this->status->value,
+            'priority' => $this->priority->value,
+            'activityId' => $this->activity_id,
+            'uuid' => $this->uuid,
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
-            'projectId' => $this->project_id,
+
         ];
     }
 }

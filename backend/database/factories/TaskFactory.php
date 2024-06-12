@@ -2,14 +2,15 @@
 
 namespace Database\Factories;
 
+use App\Enums\Priority;
 use App\Enums\TrilioStatus;
-use App\Models\Project;
+use App\Models\Activity;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Activity>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Task>
  */
-class ActivityFactory extends Factory
+class TaskFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -19,18 +20,20 @@ class ActivityFactory extends Factory
     public function definition(): array
     {
         return [
-            'project_id' => Project::factory(),
             'name' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
+            'priority' => $this->faker->randomElement([
+                Priority::LOW->value,
+                Priority::HIGH->value,
+                Priority::MEDIUM->value,
+            ]),
             'status' => $this->faker->randomElement([
                 TrilioStatus::PENDING->value,
                 TrilioStatus::COMPLETED->value,
                 TrilioStatus::INPROGRESS->value,
             ]),
-            'slug' => $this->faker->slug,
-            'uuid' => $this->faker->uuid,
-            'start_date' => $this->faker->dateTime,
-            'end_date' => $this->faker->dateTime,
+            'activity_id' => Activity::factory(),
+            'due_date' => now(),
         ];
     }
 }

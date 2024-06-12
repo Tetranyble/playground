@@ -2,16 +2,16 @@
 
 namespace Database\Seeders;
 
-use App\Models\Activity;
+use App\Models\Task;
 use Illuminate\Database\Seeder;
 
-class ActivitySeeder extends Seeder
+class TaskSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Activity::factory(20)->create();
+        Task::factory(20)->create();
     }
 }
