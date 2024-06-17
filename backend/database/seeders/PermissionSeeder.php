@@ -26,18 +26,12 @@ class PermissionSeeder extends Seeder
             ]);
         });
 
-        collect([
-            'staff' => 'The staff.',
-            'developer' => 'The developer.',
-            'manager' => 'The manager.',
-            'designer' => 'The designer',
-            'scrum master' => 'The scrum master',
-
-        ])->each(function ($description, $role) use ($permissions) {
+        collect(config('backend.roles'))->each(function ($index, $role) use ($permissions) {
             $role = Role::create([
                 'name' => Str::slug($role),
                 'label' => Str::ucfirst($role),
-                'description' => $description,
+                'description' => $index['description'],
+                'order' => $index['order'],
                 'is_system' => 1,
             ]);
             if ($role->name === 'admin') {

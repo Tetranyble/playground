@@ -85,7 +85,7 @@ class TaskTest extends TestCase
                     'name' => 'new activity',
                     'description' => 'new activity description',
                     'due_date' => now()->format('Y-m-d H:i:s'),
-                    'priority' => 'LOW'
+                    'priority' => 'LOW',
                 ]
             )->assertStatus(201);
 

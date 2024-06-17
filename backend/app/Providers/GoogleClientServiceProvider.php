@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Enums\StorageProvider;
 use App\Models\WebService;
 use App\Services\Google\GoogleCalendar;
 use App\Services\Google\Profile;

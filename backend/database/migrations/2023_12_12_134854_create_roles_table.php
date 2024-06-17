@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('label')->nullable();
+            $table->integer('order')->default(1);
             $table->string('description')->nullable();
             $table->boolean('is_system')->default(false);
             $table->timestamps();

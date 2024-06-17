@@ -3,12 +3,12 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Enums\StorageProvider;
+use App\Enums\Disk;
 use App\Enums\UserStatus;
 use App\Http\Resources\UserResource;
 use App\Traits\ApiMustVerify;
 use App\Traits\HasRoles;
-use App\Traits\Thumbnail;
+use App\Traits\Mediable;
 use App\Traits\WithAttribute;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
@@ -23,7 +23,7 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 {
     use ApiMustVerify, HasApiTokens,HasFactory, HasRoles,
-        Notifiable, Thumbnail, WithAttribute;
+        Mediable, Notifiable, WithAttribute;
 
     /**
      * The attributes that are mass assignable.
@@ -98,7 +98,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     public function service(): Model|HasMany
     {
         return $this->webServices()
-            ->where('name', StorageProvider::GOOGLE)
+            ->where('name', Disk::GOOGLE)
             ->first();
     }
 

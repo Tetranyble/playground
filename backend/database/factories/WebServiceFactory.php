@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Enums\StorageProvider;
+use App\Enums\Disk;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -19,7 +19,7 @@ class WebServiceFactory extends Factory
     public function definition(): array
     {
         return [
-            'provider' => StorageProvider::GOOGLE->value,
+            'provider' => Disk::GOOGLE->value,
             'name' => $this->faker->sentence,
             'user_id' => User::factory(),
             'client_id' => $this->faker->sentence,

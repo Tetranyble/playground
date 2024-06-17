@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::name('v1.')->prefix('v1')->group(function () {
+
     Route::post('signup', \App\Http\Controllers\Api\RegistrationController::class)
         ->name('signup')
         ->middleware('guest:api');
@@ -152,4 +153,12 @@ Route::name('v1.')->prefix('v1')->group(function () {
         Route::delete('activities/activity/{task:uuid}', [\App\Http\Controllers\Trilio\Api\TaskController::class, 'destroy'])
             ->name('tasks.destroy');
     });
+
+    /**
+     * Media management endpoints
+     */
+    Route::post('media', [\App\Http\Controllers\Api\MediaController::class, 'post'])
+        ->name('media.post');
+    Route::get('media/{media:uuid}', [\App\Http\Controllers\Api\MediaController::class, 'show'])
+        ->name('media.show');
 });

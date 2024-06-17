@@ -2,7 +2,7 @@
 
 namespace App\Services\Googles;
 
-use App\Enums\StorageProvider;
+use App\Enums\Disk;
 use App\Models\Channel;
 use App\Models\WebService;
 use Google\Client;
@@ -41,7 +41,7 @@ class Youtube
      */
     public function getLatestAccessTokenFromDB()
     {
-        $service = WebService::where('name', StorageProvider::GOOGLE)->first();
+        $service = WebService::where('name', Disk::GOOGLE)->first();
 
         return $service ? $service->token : null;
         //return $latest ? (is_array($latest) ? $latest['access_token'] : $latest->access_token ) : null;

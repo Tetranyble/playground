@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Enums\StorageProvider;
+use App\Enums\Disk;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\WebServiceResource;
 use Google\Client;
@@ -34,9 +34,9 @@ class ServiceAuthenticationController extends Controller
         $service = $user
             ->webServices()
             ->updateOrCreate([
-                'name' => StorageProvider::GOOGLE,
+                'name' => Disk::GOOGLE,
             ], [
-                'name' => StorageProvider::GOOGLE,
+                'name' => Disk::GOOGLE,
                 'token' => $token,
                 'refresh_token' => $token['refresh_token'],
                 'client_id' => $client->id(),

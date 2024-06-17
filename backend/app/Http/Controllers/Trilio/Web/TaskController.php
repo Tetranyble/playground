@@ -19,7 +19,8 @@ class TaskController extends Controller
             ->taskFor($activity)
             ->search($request->search ?? '')
             ->paginate($request->quantity);
-        return view('tasks.index',compact('tasks'));
+
+        return view('tasks.index', compact('tasks'));
     }
 
     /**
@@ -39,11 +40,12 @@ class TaskController extends Controller
         $taskData = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:10000',
-            'activity_id' => 'required|numeric'
+            'activity_id' => 'required|numeric',
         ]);
         Task::create($taskData);
+
         return redirect()->route('activities.tasks.index', ['activity' => $request->activity_id])
-            ->with('success', "Task create successfully");
+            ->with('success', 'Task create successfully');
     }
 
     /**
@@ -77,6 +79,7 @@ class TaskController extends Controller
     {
         $taskName = $task->name;
         $task->delete();
+
         return redirect()->back()->with('success', "Task: {$taskName} delete successfully.");
     }
 }

@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
-use App\Enums\StorageProvider;
+use App\Enums\Disk;
+use App\Enums\MediaPurpose;
 use App\Services\FileSystem;
-use App\Traits\FileSystemTrait;
+use App\Traits\Uuidable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @OA\Schema(schema="Media")
@@ -46,7 +49,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Media extends Model
 {
-    use FileSystemTrait, HasFactory;
+    use HasFactory, SoftDeletes, Uuidable;
 
     protected $fillable = [
         'description',
@@ -56,21 +59,22 @@ class Media extends Model
         'mime_type',
         'current',
         'disk',
+        'use',
+        'uuid',
     ];
-
-    public function media()
-    {
-        return $this->morphTo('mediable');
-    }
 
     protected $casts = [
         'current' => 'boolean',
-        'disk' => StorageProvider::class,
+        'disk' => Disk::class,
+        'use' => MediaPurpose::class,
     ];
 
-    public function setIsCurrentAttribute($value)
+    /**
+     * Get media
+     */
+    public function media(): MorphTo
     {
-        $this->attributes['current'] = (int) $value;
+        return $this->morphTo('mediable');
     }
 
     public function getIsCurrentAttribute($value): bool

@@ -19,14 +19,13 @@ class ProjectSeeder extends Seeder
             ->recycle(User::first())
             ->create();
 
-        $projects->map(function($project){
+        $projects->map(function ($project) {
             Activity::factory(10)->create([
                 'project_id' => $project->id,
-            ])->map(fn($act)=> Task::factory(10)->create([
-                'activity_id' => $act->id
+            ])->map(fn ($act) => Task::factory(10)->create([
+                'activity_id' => $act->id,
             ]));
         });
-
 
     }
 }

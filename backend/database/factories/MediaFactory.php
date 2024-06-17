@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Enums\StorageProvider;
+use App\Enums\Disk;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,9 +18,10 @@ class MediaFactory extends Factory
     public function definition(): array
     {
         return [
-            'path' => $this->faker->image,
+            'path' => $this->faker->imageUrl,
+            'uuid' => $this->faker->uuid,
             'description' => $this->faker->sentence,
-            'disk' => StorageProvider::S3PRIVATE->value,
+            'disk' => Disk::PRIVATE->value,
             'attribution' => $this->faker->sentence,
             'mime_type' => 'image/png',
             'current' => $this->faker->randomElement([true, false]),

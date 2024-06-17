@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Trilio\Web;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GeneralRequest;
 use App\Models\Activity;
-use App\Models\Task;
 use Illuminate\Http\Request;
 
 class ActivityController extends Controller
@@ -15,7 +14,6 @@ class ActivityController extends Controller
      */
     public function index(GeneralRequest $request)
     {
-
 
     }
 

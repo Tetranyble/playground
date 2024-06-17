@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('refresh_token')->nullable();
             $table->json('scopes')->nullable();
             $table->string('client_id')->nullable(); //google_id that's account ID
-            $table->string('provider')->default(\App\Enums\StorageProvider::GOOGLE->value);
+            $table->string('provider')->default(\App\Enums\Disk::GOOGLE->value);
             $table->string('name')->nullable();
             $table->string('email')->unique()->nullable();
 
