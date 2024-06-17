@@ -17,7 +17,7 @@ class ActivityCollection extends ResourceCollection
         return [
             'status' => true,
             'message' => 'success',
-            'data' => $this->collection
+            'data' => $this->collection,
         ];
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\StorageProvider;
+use App\Enums\Disk;
 use App\Jobs\SynchronizeCalendars;
 use App\Jobs\WatchCalendars;
 use App\Traits\Synchronizable;
@@ -29,7 +29,7 @@ class WebService extends Model
     ];
 
     protected $casts = [
-        'provider' => StorageProvider::class,
+        'provider' => Disk::class,
         'token' => 'json',
         'scopes' => 'json',
     ];

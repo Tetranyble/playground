@@ -88,9 +88,9 @@ class ProfileDocumentController extends Controller
                 $system->store(
                     $request->file('resume'),
                     'resumes',
-                    \App\Enums\StorageProvider::S3PUBLIC
+                    \App\Enums\Disk::S3PUBLIC
                 ),
-                \App\Enums\StorageProvider::S3PUBLIC
+                \App\Enums\Disk::S3PUBLIC
             )
         );
         $user->fill([

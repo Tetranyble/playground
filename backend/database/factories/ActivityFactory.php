@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Enums\TrilioStatus;
 use App\Models\Project;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

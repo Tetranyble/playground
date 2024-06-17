@@ -124,8 +124,8 @@ class ProjectTest extends TestCase
                 'project' => $project->uuid,
             ]))
             ->assertStatus(204);
-        $this->assertSoftDeleted('projects',[
-            'id' => $project->id
+        $this->assertSoftDeleted('projects', [
+            'id' => $project->id,
         ]);
 
     }

@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::name('v1.')->prefix('v1')->group(function () {
+
     Route::post('signup', \App\Http\Controllers\Api\RegistrationController::class)
         ->name('signup')
         ->middleware('guest:api');
@@ -121,10 +122,8 @@ Route::name('v1.')->prefix('v1')->group(function () {
     Route::middleware(['auth:api', 'roles:manager,staff'])->name('trilio.')->prefix('trilio')->group(function () {
         Route::get('projects', [\App\Http\Controllers\Trilio\Api\ProjectController::class, 'index'])
             ->name('projects.index');
-        //->middleware('can:viewAny');
         Route::get('projects/{project:uuid}', [\App\Http\Controllers\Trilio\Api\ProjectController::class, 'show'])
             ->name('projects.show');
-        //->middleware('can:view');
         Route::post('projects', [\App\Http\Controllers\Trilio\Api\ProjectController::class, 'store'])
             ->name('projects.store');
         Route::patch('projects/{project:uuid}', [\App\Http\Controllers\Trilio\Api\ProjectController::class, 'update'])
@@ -134,15 +133,32 @@ Route::name('v1.')->prefix('v1')->group(function () {
 
         Route::get('projects/{project:uuid}/activities', [\App\Http\Controllers\Trilio\Api\ActivityController::class, 'index'])
             ->name('activities.index');
-        //->middleware('can:viewAny');
         Route::get('projects/activities/{activity:uuid}', [\App\Http\Controllers\Trilio\Api\ActivityController::class, 'show'])
             ->name('activities.show');
-        //->middleware('can:view');
         Route::post('projects/{project:uuid}/activities', [\App\Http\Controllers\Trilio\Api\ActivityController::class, 'store'])
             ->name('activities.store');
         Route::patch('projects/activities/{activity:uuid}', [\App\Http\Controllers\Trilio\Api\ActivityController::class, 'update'])
             ->name('activities.update');
         Route::delete('projects/activities/{activity:uuid}', [\App\Http\Controllers\Trilio\Api\ActivityController::class, 'destroy'])
             ->name('activities.destroy');
+
+        Route::get('activities/{activity:uuid}/tasks', [\App\Http\Controllers\Trilio\Api\TaskController::class, 'index'])
+            ->name('tasks.index');
+        Route::get('activities/activity/{task:uuid}', [\App\Http\Controllers\Trilio\Api\TaskController::class, 'show'])
+            ->name('tasks.show');
+        Route::post('activities/{activity:uuid}/tasks', [\App\Http\Controllers\Trilio\Api\TaskController::class, 'store'])
+            ->name('tasks.store');
+        Route::patch('activities/activity/{task:uuid}', [\App\Http\Controllers\Trilio\Api\TaskController::class, 'update'])
+            ->name('tasks.update');
+        Route::delete('activities/activity/{task:uuid}', [\App\Http\Controllers\Trilio\Api\TaskController::class, 'destroy'])
+            ->name('tasks.destroy');
     });
+
+    /**
+     * Media management endpoints
+     */
+    Route::post('media', [\App\Http\Controllers\Api\MediaController::class, 'post'])
+        ->name('media.post');
+    Route::get('media/{media:uuid}', [\App\Http\Controllers\Api\MediaController::class, 'show'])
+        ->name('media.show');
 });

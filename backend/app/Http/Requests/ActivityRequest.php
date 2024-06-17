@@ -59,7 +59,7 @@ class ActivityRequest extends FormRequest
             'description' => 'nullable|string|max:10000',
             'start_date' => 'nullable|date_format:Y-m-d H:i:s',
             'end_date' => 'nullable|date_format:Y-m-d H:i:s|after:start_date',
-            'status' => ['nullable', new Enum(TrilioStatus::class)]
+            'status' => ['nullable', new Enum(TrilioStatus::class)],
         ];
     }
 }

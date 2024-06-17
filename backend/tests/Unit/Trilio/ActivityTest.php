@@ -5,7 +5,6 @@ namespace Tests\Unit\Trilio;
 use App\Enums\TrilioStatus;
 use App\Models\Activity;
 use App\Models\Project;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
@@ -26,12 +25,12 @@ class ActivityTest extends TestCase
             'slug',
             'uuid',
             'start_date',
-            'end_date'
+            'end_date',
         ]));
     }
 
     /** @test */
-    public function it_has_project_owner()
+    public function it_has_a_project()
     {
         $project = Project::factory()->create();
         $activity = Activity::factory()->create([
@@ -41,12 +40,12 @@ class ActivityTest extends TestCase
         $this->assertEquals($activity->project_id, $project->id);
         $this->assertInstanceOf(Project::class, $activity->project);
     }
+
     /** @test */
     public function activity_status_instance_of_trilio_status()
     {
 
         $activity = Activity::factory()->create();
-
 
         $this->assertInstanceOf(TrilioStatus::class, $activity->status);
     }
@@ -56,8 +55,7 @@ class ActivityTest extends TestCase
     {
         $projects = Project::factory(20)->create();
 
-        $activities = $projects->map(fn($project) =>
-        Activity::factory(10)->create(['project_id' => $project->id])
+        $activities = $projects->map(fn ($project) => Activity::factory(10)->create(['project_id' => $project->id])
         );
 
         $this->assertCount(
@@ -71,8 +69,7 @@ class ActivityTest extends TestCase
     public function activity_may_be_scoped_to_project_instances()
     {
         $projects = Project::factory(20)->create();
-        $projects->map(fn($project) =>
-        Activity::factory(10)->create(['project_id' => $project->id])
+        $projects->map(fn ($project) => Activity::factory(10)->create(['project_id' => $project->id])
         );
 
         $this->assertCount(
@@ -87,8 +84,7 @@ class ActivityTest extends TestCase
     {
         $projects = Project::factory(20)->create();
 
-        $projects->map(fn($project) =>
-        Activity::factory(10)->create(['project_id' => $project->id])
+        $projects->map(fn ($project) => Activity::factory(10)->create(['project_id' => $project->id])
         );
 
         $this->assertCount(
@@ -103,8 +99,7 @@ class ActivityTest extends TestCase
     {
         $projects = Project::factory(20)->create();
 
-        $projects->map(fn($project) =>
-        Activity::factory(10)->create(['project_id' => $project->id])
+        $projects->map(fn ($project) => Activity::factory(10)->create(['project_id' => $project->id])
         );
         $this->assertCount(
             20,
@@ -118,8 +113,7 @@ class ActivityTest extends TestCase
     {
         $projects = Project::factory(20)->create();
 
-        $projects->map(fn($project) =>
-        Activity::factory(10)->create(['project_id' => $project->id])
+        $projects->map(fn ($project) => Activity::factory(10)->create(['project_id' => $project->id])
         );
 
         $this->assertCount(

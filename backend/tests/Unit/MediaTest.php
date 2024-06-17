@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use App\Enums\StorageProvider;
+use App\Enums\Disk;
 use App\Models\Media;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -87,13 +87,13 @@ class MediaTest extends TestCase
     /** @test */
     public function it_has_a_disk()
     {
-        $disk = StorageProvider::S3PRIVATE;
+        $disk = Disk::S3PRIVATE;
 
         $media = Media::factory()->create([
             'disk' => $disk,
         ]);
 
         $this->assertEquals($disk, $media->disk);
-        $this->assertInstanceOf(StorageProvider::class, $media->disk);
+        $this->assertInstanceOf(Disk::class, $media->disk);
     }
 }

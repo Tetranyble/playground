@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Activity extends Model
 {
-    use HasFactory, Sluggable, Uuidable, SoftDeletes;
+    use HasFactory, Sluggable, SoftDeletes, Uuidable;
 
     protected $fillable = [
         'user_id',
@@ -24,13 +24,13 @@ class Activity extends Model
         'slug',
         'start_date',
         'end_date',
-        'project_id'
+        'project_id',
     ];
 
     protected $casts = [
         'start_date' => 'datetime',
         'end_date' => 'datetime',
-        'status' => TrilioStatus::class
+        'status' => TrilioStatus::class,
     ];
 
     /**
@@ -40,11 +40,7 @@ class Activity extends Model
     {
         return $this->belongsTo(Project::class, 'project_id');
     }
-    /**
-     * @param Builder $builder
-     * @param string|null $terms
-     * @return Builder
-     */
+
     public function scopeSearch(Builder $builder, ?string $terms = null): Builder
     {
         return $builder->where(function ($builder) use ($terms) {
@@ -59,22 +55,21 @@ class Activity extends Model
 
     /**
      * Scopes the query to given project(s))
-     * @param Builder $builder
-     * @param Project[]|string[]...$projects
-     * @return Builder
+     *
+     * @param  Project[]|string[]  ...$projects
      */
     public function scopeActivityFor(Builder $builder, ...$projects): Builder
     {
-        return $builder->when(array_filter($projects), function ($q)use($projects){
-            $q->where(function ($q) use($projects){
-                collect($projects)->map(function($project) use($q){
+        return $builder->when(array_filter($projects), function ($q) use ($projects) {
+            $q->where(function ($q) use ($projects) {
+                collect($projects)->map(function ($project) use ($q) {
                     return $project instanceof Project ?
-                        $q->orWhere('project_id', $project->id) :(
+                        $q->orWhere('project_id', $project->id) : (
                             is_numeric($project) ? $q->orWhere('project_id', $project) :
-                                $q->orWhere('project_id', function ($q) use($project){
+                                $q->orWhere('project_id', function ($q) use ($project) {
                                     $q->from('projects')
                                         ->select('id')
-                                        ->where('uuid',$project);
+                                        ->where('uuid', $project);
                                 })
                         );
                 });

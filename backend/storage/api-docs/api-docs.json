@@ -32,7 +32,7 @@
             "description": "Ugbanawaji API Local Server. This server is attached to the local environment."
         },
         {
-            "url": "http://interview.test/api/v1"
+            "url": "http://backend.test/api/v1"
         }
     ],
     "paths": {
@@ -1037,6 +1037,118 @@
                         "sanctum": []
                     }
                 ]
+            }
+        },
+        "/media": {
+            "post": {
+                "tags": [
+                    "Media"
+                ],
+                "summary": "Upload media",
+                "description": "Create new media file",
+                "operationId": "MediaController::__invoke",
+                "requestBody": {
+                    "description": "Create new media file",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MediaRequest"
+                            },
+                            "example": {
+                                "photo": "Ugbanawaji"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "The uploaded media file",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "success",
+                                    "status": "success",
+                                    "status_code": 200,
+                                    "data": {
+                                        "disk": "s3-public",
+                                        "path": "http://localhost:8000/storage/images/DU8Y739YQWHDLKuhluwqehdluiwked.png",
+                                        "id": 24
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/422"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/500"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/media/{mediaUuid}": {
+            "get": {
+                "tags": [
+                    "Media"
+                ],
+                "summary": "The media resource",
+                "description": "The media resource.",
+                "operationId": "Api/MediaController::show",
+                "parameters": [
+                    {
+                        "name": "mediaUuid",
+                        "in": "path",
+                        "description": "The media resource uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "success",
+                                    "status": true
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/422"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/500"
+                    }
+                }
             }
         },
         "/users/{user}/messages": {
@@ -2551,6 +2663,342 @@
                     }
                 ]
             }
+        },
+        "/trilio/activities/{activityUid}/tasks": {
+            "get": {
+                "tags": [
+                    "Tasks",
+                    "Trilio"
+                ],
+                "summary": "The resource collection",
+                "description": "The resource collection",
+                "operationId": "Trilio/Api/TaskController::index",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search the resource by name or description",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "activityUid",
+                        "in": "query",
+                        "description": "Scope the tasks to task uuid. pass false if not required",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "quantity",
+                        "in": "query",
+                        "description": "The quantity",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The resource collection",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/TaskResource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/422"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/500"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Tasks",
+                    "Trilio"
+                ],
+                "summary": "Create new task",
+                "description": "Create new task",
+                "operationId": "Trilio/Api/TaskController::store",
+                "parameters": [
+                    {
+                        "name": "activityUid",
+                        "in": "path",
+                        "description": "The task uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Create new task",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TaskRequest"
+                            },
+                            "example": {
+                                "name": "The brown fox",
+                                "due_date": "2025-06-11 10:25:46",
+                                "status": "PENDING|INPROGRESS|COMPLETD",
+                                "priority": "LOW|MEDIUM|HIGH",
+                                "description": "The quick brown fox task test creation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "success.",
+                                    "status": true,
+                                    "data": {
+                                        "uuid": "hcusyadcdsuvcjghsdvcdsyus78s7sgshvjcds",
+                                        "name": "The brown fox",
+                                        "due_date": "2025-06-11 10:25:46",
+                                        "status": "PENDING|INPROGRESS|COMPLETD",
+                                        "priority": "LOW|MEDIUM|HIGH",
+                                        "description": "The quick brown fox task test creation",
+                                        "createdAt": "2022-09-08T12:29:54.000000Z",
+                                        "updatedAt": "2022-09-08T12:29:54.000000Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/422"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/500"
+                    }
+                }
+            }
+        },
+        "/trilio/activities/tasks/{activityid}": {
+            "get": {
+                "tags": [
+                    "Tasks",
+                    "Trilio"
+                ],
+                "summary": "The task resource",
+                "description": "The task resource.",
+                "operationId": "Trilio/Api/TaskController::show",
+                "parameters": [
+                    {
+                        "name": "Taskuid",
+                        "in": "path",
+                        "description": "The task uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "success",
+                                    "status": true
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/422"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/500"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/trilio/activities/tasks/{activityuid}": {
+            "delete": {
+                "tags": [
+                    "Tasks",
+                    "Trilio"
+                ],
+                "summary": "The delete task resource",
+                "description": "The task resource.",
+                "operationId": "Api/Trilio/Api/TaskController::destroy",
+                "parameters": [
+                    {
+                        "name": "taskuid",
+                        "in": "path",
+                        "description": "The task uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "success",
+                                    "status": true
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/422"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/500"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Tasks",
+                    "Trilio"
+                ],
+                "summary": "Update task record",
+                "description": "Update task record.",
+                "operationId": "Trilio/Api/TaskController::update",
+                "parameters": [
+                    {
+                        "name": "activityuid",
+                        "in": "path",
+                        "description": "The task resource uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Update task resource.",
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TaskRequest"
+                            },
+                            "example": {
+                                "name": "The brown fox",
+                                "due_date": "2025-06-11 10:25:46",
+                                "status": "PENDING|INPROGRESS|COMPLETD",
+                                "priority": "LOW|MEDIUM|HIGH",
+                                "description": "The quick brown fox task test creation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "The updated resource.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "success",
+                                    "status": true,
+                                    "data": {
+                                        "name": "The brown fox",
+                                        "description": "The quick brown fox task test creation"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/422"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/500"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -2606,6 +3054,15 @@
                     "search": {
                         "description": "The search term if any. It's completely optional",
                         "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "MediaRequest": {
+                "properties": {
+                    "media": {
+                        "description": "The media file",
+                        "type": "file"
                     }
                 },
                 "type": "object"
@@ -2712,6 +3169,27 @@
                 },
                 "type": "object"
             },
+            "TaskRequest": {
+                "properties": {
+                    "name": {
+                        "description": "The task name",
+                        "type": "string"
+                    },
+                    "status": {
+                        "description": "The task status",
+                        "type": "string"
+                    },
+                    "description": {
+                        "description": "The task description",
+                        "type": "string"
+                    },
+                    "due_date": {
+                        "description": "The task start_date",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "UpdateProfileRequest": {
                 "properties": {
                     "firstname": {
@@ -2769,7 +3247,7 @@
             "ActivityResource": {
                 "properties": {
                     "id": {
-                        "description": "The project Id.",
+                        "description": "The activity Id.",
                         "type": "string"
                     },
                     "name": {
@@ -2777,19 +3255,19 @@
                         "type": "string"
                     },
                     "uuid": {
-                        "description": "The project uuid.",
+                        "description": "The activity uuid.",
                         "type": "string"
                     },
-                    "ownerId": {
-                        "description": "The project ownerId.",
+                    "projectId": {
+                        "description": "The activity projectId.",
                         "type": "string"
                     },
                     "slug": {
-                        "description": "The project slug to support S.E.O.",
+                        "description": "The activity slug to support S.E.O.",
                         "type": "string"
                     },
                     "description": {
-                        "description": "The project description.",
+                        "description": "The activity description.",
                         "type": "string"
                     },
                     "start_date": {
@@ -2798,9 +3276,38 @@
                         "format": "date"
                     },
                     "end_date": {
-                        "description": "The project end_date.",
+                        "description": "The activity end_date.",
                         "type": "string",
                         "format": "date"
+                    }
+                },
+                "type": "object"
+            },
+            "MediaResource": {
+                "properties": {
+                    "path": {
+                        "description": "The resource link.",
+                        "type": "string"
+                    },
+                    "description": {
+                        "description": "The resource description.",
+                        "type": "string"
+                    },
+                    "attribution": {
+                        "description": "The resource attribution.",
+                        "type": "string"
+                    },
+                    "mime_type": {
+                        "description": "The resource mime type. RFC 6838.",
+                        "type": "string"
+                    },
+                    "size": {
+                        "description": "The resource file size.",
+                        "type": "string"
+                    },
+                    "current": {
+                        "description": "The resource is default.",
+                        "type": "boolean"
                     }
                 },
                 "type": "object"
@@ -2884,6 +3391,46 @@
                     "description": {
                         "description": "The role description.",
                         "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "TaskResource": {
+                "properties": {
+                    "id": {
+                        "description": "The task Id.",
+                        "type": "string"
+                    },
+                    "name": {
+                        "description": "The task name.",
+                        "type": "string"
+                    },
+                    "uuid": {
+                        "description": "The task uuid.",
+                        "type": "string"
+                    },
+                    "activityId": {
+                        "description": "The task activityId.",
+                        "type": "string"
+                    },
+                    "due_date": {
+                        "description": "The task due date.",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "description": {
+                        "description": "The task description.",
+                        "type": "string"
+                    },
+                    "priority": {
+                        "description": "The task resource priority.",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "status": {
+                        "description": "The resource task status.",
+                        "type": "string",
+                        "format": "date"
                     }
                 },
                 "type": "object"
@@ -3142,9 +3689,9 @@
                 "scheme": "https",
                 "flows": {
                     "password": {
-                        "authorizationUrl": "http://localhost:8000/oauth/authorize",
-                        "tokenUrl": "http://localhost:8000/api/v1/login",
-                        "refreshUrl": "http://localhost:8000/token/refresh",
+                        "authorizationUrl": "http://backend.test/oauth/authorize",
+                        "tokenUrl": "http://backend.test/api/v1/login",
+                        "refreshUrl": "http://backend.test/token/refresh",
                         "scopes": []
                     }
                 }

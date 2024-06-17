@@ -2,7 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Activity;
 use App\Models\Project;
+use App\Models\Task;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class ProjectSeeder extends Seeder
@@ -12,7 +15,17 @@ class ProjectSeeder extends Seeder
      */
     public function run(): void
     {
-        Project::factory(10)
+        $projects = Project::factory(10)
+            ->recycle(User::first())
             ->create();
+
+        $projects->map(function ($project) {
+            Activity::factory(10)->create([
+                'project_id' => $project->id,
+            ])->map(fn ($act) => Task::factory(10)->create([
+                'activity_id' => $act->id,
+            ]));
+        });
+
     }
 }

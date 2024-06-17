@@ -2,13 +2,13 @@
 
 namespace Tests\Supports;
 
-use App\Enums\StorageProvider;
+use App\Enums\Disk;
 
 trait WebServiceSupport
 {
-    public function token(StorageProvider $service = StorageProvider::GOOGLE)
+    public function token(Disk $service = Disk::GOOGLE)
     {
-        if ($service === StorageProvider::GOOGLE) {
+        if ($service === Disk::GOOGLE) {
             return $this->google();
         }
     }

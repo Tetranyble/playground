@@ -87,7 +87,7 @@ return [
             /*
              * Edit to set the api's base path
             */
-            'base' => env('L5_SWAGGER_BASE_PATH', 'https://interview.com'),
+            'base' => env('L5_SWAGGER_BASE_PATH', 'https://ugbanawaji.com'),
 
             /*
              * Edit to set path where swagger ui assets should be stored
@@ -303,7 +303,7 @@ return [
          * Constants which can be used in annotations
          */
         'constants' => [
-            'L5_SWAGGER_CONST_HOST' => env('L5_SWAGGER_CONST_HOST', 'https://interview.com'),
+            'L5_SWAGGER_CONST_HOST' => env('L5_SWAGGER_CONST_HOST', 'https://ugbanawaji.com'),
         ],
     ],
 ];

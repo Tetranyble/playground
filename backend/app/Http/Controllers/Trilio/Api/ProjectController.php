@@ -8,7 +8,6 @@ use App\Http\Requests\ProjectRequest;
 use App\Http\Resources\ProjectCollection;
 use App\Http\Resources\ProjectResource;
 use App\Models\Project;
-use App\Models\User;
 use Illuminate\Http\JsonResponse;
 
 class ProjectController extends Controller
@@ -233,6 +232,7 @@ class ProjectController extends Controller
      *     @OA\Response(
      *         response=200,
      *         description="The updated resource.",
+     *
      *         @OA\JsonContent(
      *             type="object",
      *             example={
@@ -293,6 +293,7 @@ class ProjectController extends Controller
      *     @OA\Response(
      *         response=204,
      *         description="success",
+     *
      *         @OA\JsonContent(
      *
      *             @OA\Schema(ref="#/components/schemas/ProjectResource"),

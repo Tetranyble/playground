@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::create('media', function (Blueprint $table) {
             $table->id();
+            $table->uuid();
             $table->nullableMorphs('mediable');
             $table->text('description')->nullable();
             $table->text('attribution')->nullable();
             $table->string('mime_type')->nullable();
-            $table->string('disk')->default(\App\Enums\StorageProvider::LOCAL->value);
+            $table->string('use')->default(\App\Enums\MediaPurpose::GENERAL->value);
+            $table->string('disk')->default(\App\Enums\Disk::PUBLIC->value);
             $table->string('path')->nullable();
             $table->double('size')->nullable();
             $table->boolean('current')->default(false);

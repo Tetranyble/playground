@@ -7,8 +7,6 @@ use App\Http\Requests\ActivityRequest;
 use App\Http\Requests\GeneralRequest;
 use App\Http\Resources\ActivityCollection;
 use App\Http\Resources\ActivityResource;
-use App\Http\Resources\ProjectCollection;
-use App\Http\Resources\ProjectResource;
 use App\Models\Activity;
 use App\Models\Project;
 use Illuminate\Http\JsonResponse;
@@ -30,36 +28,45 @@ class ActivityController extends Controller
      *         in="query",
      *         description="Search the resource by name or description",
      *         required=false,
+     *
      *         @OA\Schema(
      *             type="string",
      *         )
      *     ),
+     *
      *     @OA\Parameter(
      *          name="projectUuid",
      *          in="query",
      *          description="Scope the activities to project uuid. pass false if not required",
      *          required=false,
+     *
      *          @OA\Schema(
      *              type="string",
      *          )
      *      ),
+     *
      *     @OA\Parameter(
      *         name="quantity",
      *         in="query",
      *         description="The quantity",
      *         required=false,
+     *
      *         @OA\Schema(
      *             type="integer",
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=200,
      *         description="The resource collection",
+     *
      *         @OA\JsonContent(
      *             type="array",
+     *
      *             @OA\Items(ref="#/components/schemas/ActivityResource")
      *         )
      *     ),
+     *
      *    @OA\Response(response=400, ref="#/components/responses/400"),
      *    @OA\Response(response=403, ref="#/components/responses/403"),
      *    @OA\Response(response=404, ref="#/components/responses/404"),
@@ -87,6 +94,7 @@ class ActivityController extends Controller
      * tags={"Activities", "Trilio"},
      * summary="Create new activity",
      * description="Create new activity",
+     *
      *     @OA\Parameter(
      *          name="projectUuid",
      *          in="path",
@@ -97,6 +105,7 @@ class ActivityController extends Controller
      *              type="string",
      *          )
      *      ),
+     *
      *    @OA\RequestBody(
      *         description="Create new activity",
      *         required=true,
@@ -151,7 +160,7 @@ class ActivityController extends Controller
     public function store(ActivityRequest $request, Project $project)
     {
         $activity = Activity::create([
-            ...$request->only(['name', 'description', 'project_id','start_date', 'end_date', 'status']),
+            ...$request->only(['name', 'description', 'project_id', 'start_date', 'end_date', 'status']),
             'project_id' => $project->id,
         ]);
 
@@ -176,14 +185,18 @@ class ActivityController extends Controller
      *         in="path",
      *         description="The activity uuid",
      *         required=true,
+     *
      *         @OA\Schema(
      *             type="string",
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=200,
      *         description="success",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Schema(ref="#/components/schemas/ActivityResource"),
      *             type="object",
      *             example={
@@ -192,6 +205,7 @@ class ActivityController extends Controller
      *             }
      *         )
      *     ),
+     *
      *    @OA\Response(response=400, ref="#/components/responses/400"),
      *    @OA\Response(response=404, ref="#/components/responses/404"),
      *    @OA\Response(response=422, ref="#/components/responses/422"),
@@ -223,13 +237,16 @@ class ActivityController extends Controller
      *          in="path",
      *          description="The activity resource uuid",
      *          required=true,
+     *
      *          @OA\Schema(
      *              type="string",
      *          )
      *      ),
+     *
      *    @OA\RequestBody(
      *         description="Update activity resource.",
      *         required=false,
+     *
      *         @OA\MediaType(
      *             mediaType="application/json",
      *             example={
@@ -238,9 +255,11 @@ class ActivityController extends Controller
      *                 "end_date": "2025-06-11 10:25:46",
      *                 "description": "The quick brown fox project test creation",
      *             },
+     *
      *             @OA\Schema(ref="#/components/schemas/ActivityRequest")
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=200,
      *         description="The updated resource.",
@@ -289,18 +308,22 @@ class ActivityController extends Controller
      *     security={ * {"sanctum": {} } * },
      *     description="The activity resource.",
      *     tags={"Activities", "Trilio"},
+     *
      *     @OA\Parameter(
      *         name="activityuid",
      *         in="path",
      *         description="The activity uuid",
      *         required=true,
+     *
      *         @OA\Schema(
      *             type="string",
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=204,
      *         description="success",
+     *
      *         @OA\JsonContent(
      *
      *             @OA\Schema(ref="#/components/schemas/ActivityResource"),

@@ -12,7 +12,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *   @OA\Property(
  *     property="id",
  *     type="string",
- *     description="The project Id."
+ *     description="The activity Id."
  *   ),
  *   @OA\Property(
  *     property="name",
@@ -22,22 +22,22 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *   @OA\Property(
  *     property="uuid",
  *     type="string",
- *     description="The project uuid."
+ *     description="The activity uuid."
  *   ),
  *  @OA\Property(
- *      property="ownerId",
+ *      property="projectId",
  *      type="string",
- *      description="The project ownerId."
+ *      description="The activity projectId."
  *    ),
  *   @OA\Property(
  *       property="slug",
  *       type="string",
- *       description="The project slug to support S.E.O."
+ *       description="The activity slug to support S.E.O."
  *     ),
  *   @OA\Property(
  *     property="description",
  *     type="string",
- *     description="The project description."
+ *     description="The activity description."
  *   ),
  *   @OA\Property(
  *      property="start_date",
@@ -47,7 +47,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *   @OA\Property(
  *      property="end_date",
  *      type="date",
- *      description="The project end_date."
+ *      description="The activity end_date."
  *    ),
  * }
  */

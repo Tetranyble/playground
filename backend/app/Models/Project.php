@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Project extends Model
 {
-    use HasFactory, Sluggable, Uuidable, SoftDeletes;
+    use HasFactory, Sluggable, SoftDeletes, Uuidable;
 
     protected $fillable = [
         'user_id',
@@ -43,17 +43,12 @@ class Project extends Model
 
     /**
      * Get activities
-     * @return HasMany
      */
     public function activities(): HasMany
     {
         return $this->hasMany(Activity::class, 'project_id');
     }
-    /**
-     * @param Builder $builder
-     * @param string|null $terms
-     * @return Builder
-     */
+
     public function scopeSearch(Builder $builder, ?string $terms = null): Builder
     {
         return $builder->where(function ($builder) use ($terms) {

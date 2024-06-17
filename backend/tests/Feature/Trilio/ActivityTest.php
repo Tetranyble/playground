@@ -38,8 +38,8 @@ class ActivityTest extends TestCase
             'project_id' => $this->project->id,
         ]);
         $response = $this->actingAs($this->user, 'api')
-            ->getJson(route('v1.trilio.activities.index',[
-                'project' => $this->project->uuid
+            ->getJson(route('v1.trilio.activities.index', [
+                'project' => $this->project->uuid,
             ]))
             ->assertStatus(200);
         $response->assertJson(fn (AssertableJson $json) => $json->has('status')
@@ -80,8 +80,8 @@ class ActivityTest extends TestCase
     public function a_user_may_create_new_activity(): void
     {
         $response = $this->actingAs($this->user, 'api')
-            ->postJson(route('v1.trilio.activities.store',[
-                'project' => $this->project->uuid
+            ->postJson(route('v1.trilio.activities.store', [
+                'project' => $this->project->uuid,
             ]),
                 [
                     'name' => 'new project',
@@ -136,8 +136,8 @@ class ActivityTest extends TestCase
                 'activity' => $activity->uuid,
             ]))
             ->assertStatus(204);
-        $this->assertSoftDeleted('activities',[
-            'id' => $activity->id
+        $this->assertSoftDeleted('activities', [
+            'id' => $activity->id,
         ]);
 
     }
