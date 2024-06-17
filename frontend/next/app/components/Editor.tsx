@@ -25,6 +25,7 @@ export const Editor:FC<EditorProps> = ({}: EditorProps) => {
                 placeholder: "Add content",
                 tools: {
                     header: {
+                      class: Header,
                       config: {
                         placeholder: 'Enter content',
                         levels: [2,3,4],
