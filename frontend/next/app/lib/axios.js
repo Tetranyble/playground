@@ -3,14 +3,17 @@ import Cookies from 'js-cookie'; // Assuming you use js-cookie for handling cook
 
 // Create an Axios instance
 const api = axios.create({
-  baseURL: "http://backend.test/api/v1/",//process.env.REACT_APP_API_BASE_URL, // Use the environment variable
+  baseURL: 'https://api.ugbanawaji.com/api/v1/', // Use the environment variable
   withCredentials: true, // This ensures cookies are sent with requests
+  headers:{
+    Accept: 'application/json'
+  }
 });
 
 // Function to refresh the access token
 const refreshToken = async () => {
   try {
-    const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/auth/refresh-token`, {
+    const response = await axios.post(`${'https://api.ugbanawaji.com/api/v1/'}/auth/refresh-token`, {
       refreshToken: Cookies.get('refreshToken'), // Get the refresh token from cookies
     });
 
