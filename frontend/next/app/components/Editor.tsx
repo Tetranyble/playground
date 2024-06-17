@@ -24,7 +24,13 @@ export const Editor:FC<EditorProps> = ({}: EditorProps) => {
                 holder: "editorjs",
                 placeholder: "Add content",
                 tools: {
-                    header: Header,
+                    header: {
+                      config: {
+                        placeholder: 'Enter content',
+                        levels: [2,3,4],
+                        defaultLevel: 3,
+                      }
+                    },
                     // paragraph: {
                     //     class: Paragraph,
                     //     inlineToolbar: true,

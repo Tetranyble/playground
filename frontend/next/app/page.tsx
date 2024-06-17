@@ -6,7 +6,7 @@ const Home = () =>{
     <main className="container-fluid center-column">
       <section className="logo-container">
         <div>Logo Here</div>
-        <Link href="/dashboard">DEVELOPER'S ASSESSMENT</Link>
+        <Link href="/dashboard">DEVELOPERS ASSESSMENT</Link>
       </section>
     </main>
   );
